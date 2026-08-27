@@ -367,78 +367,40 @@
   }
 
   /* ---- He loves me / he loves me not ---- */
-  .flower-field { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-  .phrase-label { font-size: 19px; font-weight: 700; min-height: 28px; text-align: center; color: var(--rose); transition: color .3s ease; }
-  .flower-wrap { position: relative; width: 230px; height: 230px; }
-  .flower-emoji { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 46px; z-index: 1; }
-  .petal {
-    position: absolute;
-    width: 24px; height: 40px;
-    border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: transform .35s ease, opacity .35s ease;
+  .flower-field { display:flex; flex-direction:column; align-items:center; gap:20px; width:100%; }
+  .phrase-label { font-size:19px; font-weight:700; min-height:28px; text-align:center; color:var(--rose); transition:color .3s ease; }
+  .flower-wrap { position:relative; width:min(330px,92vw); height:330px; display:flex; align-items:center; justify-content:center; }
+  .flower-svg { width:100%; height:100%; overflow:visible; }
+  .flower-stem { stroke:var(--sage-deep); stroke-width:9; stroke-linecap:round; fill:none; }
+  .flower-leaf { fill:var(--sage); stroke:var(--sage-deep); stroke-width:2; }
+  .flower-center { fill:var(--gold); stroke:var(--gold-deep); stroke-width:3; }
+  .petal { cursor:pointer; transform-box:fill-box; transform-origin:center; transition:transform .38s ease, opacity .38s ease, filter .2s ease; }
+  .petal:hover { filter:brightness(1.12); }
+  .petal.plucked { opacity:0; pointer-events:none; }
+  @media (prefers-reduced-motion:no-preference) {
+    .petal.plucked { transform:translate(var(--dx),var(--dy)) rotate(35deg) scale(.55); }
   }
-  .petal:hover { filter: brightness(1.12); }
-  .petal.plucked { opacity: 0; pointer-events: none; }
-  .flower-restart {
-    background: var(--panel-soft);
-    color: var(--text);
-    padding: 9px 18px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 700;
-    transition: background .2s ease;
-  }
-  .flower-restart:hover { background: var(--panel-softer); }
+  .flower-restart { background:var(--panel-soft); color:var(--text); padding:9px 18px; border-radius:999px; font-size:13px; font-weight:700; transition:background .2s ease; }
+  .flower-restart:hover { background:var(--panel-softer); }
 
-  /* ---- Rescue Cats ---- */
-  .cat-field { display: flex; flex-direction: column; align-items: center; gap: 18px; }
-  .cage {
-    position: relative;
-    width: 170px; height: 150px;
-    background: var(--panel);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-  .cage-door {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(90deg, var(--panel-softer) 0px, var(--panel-softer) 8px, var(--panel-soft) 8px, var(--panel-soft) 16px);
-    border-radius: 20px;
-    transition: transform .5s ease, opacity .5s ease;
-  }
-  .cage-door.open { transform: translateX(130%); opacity: 0; }
-  .cat-emoji {
-    font-size: 54px;
-    position: relative;
-    z-index: 1;
-    transition: transform .7s ease, opacity .7s ease;
-  }
-  .cat-emoji.escape { transform: translate(50px, -110px) scale(0.75) rotate(12deg); opacity: 0; }
-  .pins-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; max-width: 260px; }
-  .pin {
-    width: 16px; height: 48px;
-    border-radius: 8px;
-    background: linear-gradient(180deg, var(--gold), var(--gold-deep));
-    box-shadow: var(--shadow);
-    position: relative;
-    transition: transform .35s ease, opacity .35s ease;
-  }
-  .pin::before {
-    content: '';
-    position: absolute;
-    top: -7px; left: 50%;
-    transform: translateX(-50%);
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
-  .pin:hover { filter: brightness(1.15); }
-  .pin.pulled { transform: translateX(55px) rotate(35deg); opacity: 0; pointer-events: none; }
-  .cat-caption { font-size: 14px; color: var(--text-soft); min-height: 20px; text-align: center; max-width: 320px; line-height: 1.5; }
+  /* ---- Jar of Lovely Notes ---- */
+  .jar-game { display:flex; flex-direction:column; align-items:center; gap:18px; width:100%; }
+  .jar-count { color:var(--text-soft); font-size:13px; min-height:20px; text-align:center; }
+  .jar-scene { position:relative; width:280px; height:330px; display:flex; align-items:flex-end; justify-content:center; }
+  .jar-glow { position:absolute; width:210px; height:210px; border-radius:50%; background:radial-gradient(circle, rgba(217,174,110,.16), transparent 68%); top:48px; }
+  .jar { position:relative; width:170px; height:210px; border:4px solid rgba(231,222,233,.72); border-top:none; border-radius:24px 24px 38px 38px; background:linear-gradient(180deg,rgba(156,141,199,.13),rgba(217,152,172,.13)); box-shadow:inset 0 0 22px rgba(255,255,255,.06),0 16px 30px rgba(15,10,25,.35); cursor:pointer; transition:transform .18s ease; z-index:2; }
+  .jar:hover { transform:translateY(-3px) rotate(-1deg); }
+  .jar:active { transform:translateY(2px) scale(.98); }
+  .jar-neck { position:absolute; left:18px; right:18px; top:-20px; height:34px; border:4px solid rgba(231,222,233,.72); border-radius:12px 12px 7px 7px; background:var(--panel-soft); }
+  .jar-lid { position:absolute; left:12px; right:12px; top:-34px; height:17px; border-radius:9px; background:var(--gold); box-shadow:var(--shadow); }
+  .jar-note { position:absolute; width:42px; height:30px; border-radius:5px; background:var(--rose); box-shadow:0 3px 8px rgba(15,10,25,.22); opacity:.9; transform:rotate(var(--r)); }
+  .jar-note:nth-child(1){left:27px;bottom:27px}.jar-note:nth-child(2){left:62px;bottom:34px}.jar-note:nth-child(3){left:100px;bottom:26px}.jar-note:nth-child(4){left:45px;bottom:66px}.jar-note:nth-child(5){left:87px;bottom:68px}.jar-note:nth-child(6){left:114px;bottom:52px}
+  .jar-label { position:absolute; left:50%; top:84px; transform:translateX(-50%); width:112px; padding:9px 7px; text-align:center; border-radius:10px; background:rgba(59,49,82,.86); border:1px solid rgba(231,222,233,.2); font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; color:var(--text); z-index:3; }
+  .lovely-note { width:min(430px,92vw); min-height:120px; padding:22px 22px 20px; background:var(--panel); border:1px solid rgba(231,222,233,.12); border-radius:20px; box-shadow:var(--shadow); text-align:center; display:flex; flex-direction:column; justify-content:center; gap:8px; opacity:0; transform:translateY(10px) scale(.98); transition:opacity .3s ease,transform .3s ease; }
+  .lovely-note.show { opacity:1; transform:translateY(0) scale(1); }
+  .note-kind { color:var(--gold); font-size:12px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; }
+  .note-text { font-family:'Quicksand',sans-serif; font-weight:700; font-size:18px; line-height:1.55; }
+  .jar-hint { color:var(--text-soft); font-size:13px; text-align:center; }
 
   /* ---- Love notes quiz ---- */
   .quiz-card {
@@ -475,6 +437,8 @@
     transition: opacity .4s ease;
   }
   .quiz-reply.show { opacity: 1; }
+  .quiz-next { margin-top:16px; background:var(--lavender); color:#1E1A2E; padding:11px 22px; border-radius:999px; font-size:14px; font-weight:700; box-shadow:var(--shadow); transition:transform .15s ease,background .2s ease; }
+  .quiz-next:hover { background:var(--lavender-deep); transform:translateY(-2px); }
   .quiz-progress { margin-top: 14px; font-size: 13px; color: var(--text-soft); }
 
   /* ---------- Modal ---------- */
@@ -521,6 +485,54 @@
   .final-card p { font-size: 16px; line-height: 1.8; color: var(--text); text-align: left; margin-bottom: 16px; }
   .final-card .sign-off { margin-top: 22px; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--rose); font-size: 17px; text-align: center; }
 </style>
+
+<style id="cozy-fixes">
+.game-top-message{
+  width:min(760px,92vw);
+  margin:18px auto 12px;
+  text-align:center;
+  position:relative;
+  z-index:20;
+  padding:12px 18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.88);
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  color:#5a3f4d;
+  font-size:clamp(14px,2vw,18px);
+  line-height:1.45;
+}
+.game-top-message-heart{font-size:22px; margin-bottom:2px;}
+.end-game-controls{
+  width:min(760px,92vw);
+  margin:14px auto 28px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:30;
+}
+.end-game-controls[hidden]{display:none!important;}
+.end-game-btn{
+  border:0;
+  border-radius:999px;
+  padding:9px 16px;
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+  background:#fff;
+  color:#5a3f4d;
+  box-shadow:0 5px 16px rgba(0,0,0,.10);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.end-game-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.14);}
+.end-game-btn.secondary{background:rgba(255,255,255,.72);}
+#flower-game svg{overflow:visible;}
+#flower-game .petal{transform-box:fill-box;transform-origin:center;cursor:pointer;transition:transform .22s ease,opacity .22s ease;}
+#flower-game .petal:hover{transform:scale(1.05);}
+#flower-game .petal.plucked{opacity:0;transform:translate(var(--fall-x,0px),var(--fall-y,85px)) rotate(var(--fall-r,30deg));pointer-events:none;}
+</style>
 </head>
 <body>
 
@@ -542,7 +554,7 @@
   <div class="hub-header">
     <div class="eyebrow">a tiny arcade, built just for you</div>
     <h1>Skip the reels for a while. Come play with me instead 🌙</h1>
-    <p>Six cozy little games, no timers, no losing, nothing bright or flashy. Just clear each one to unlock a little note from me.</p>
+    <p>Six cozy little games, no timers, no losing, nothing bright or flashy. Just little ways to remind you that you are loved.</p>
   </div>
 
   <div class="progress-row" id="progressRow">
@@ -551,7 +563,7 @@
     <div class="progress-dot" data-game="star"></div>
     <div class="progress-dot" data-game="flower"></div>
     <div class="progress-dot" data-game="quiz"></div>
-    <div class="progress-dot" data-game="cats"></div>
+    <div class="progress-dot" data-game="jar"></div>
   </div>
 
   <div class="card-grid">
@@ -580,7 +592,7 @@
       <div class="check-badge" id="badge-flower">✓</div>
       <span class="icon">🌼</span>
       <h3>He Loves Me, He Loves Me Not</h3>
-      <p>Pluck every petal. We both already know how this ends.</p>
+      <p>Pluck the real petals one by one. Every petal has the same answer. 🌸</p>
       <div class="play-btn">Play</div>
     </div>
     <div class="card" tabindex="0" role="button" onclick="openScreen('quiz')">
@@ -590,12 +602,12 @@
       <p>Silly, lovely questions about us. There's always a right answer.</p>
       <div class="play-btn">Play</div>
     </div>
-    <div class="card" tabindex="0" role="button" onclick="openScreen('cats')">
-      <div class="check-badge" id="badge-cats">✓</div>
-      <span class="icon">🐱</span>
-      <h3>Rescue Cats</h3>
-      <p>Pull the pins, free the kittens. Gets a little trickier each round.</p>
-      <div class="play-btn">Play</div>
+    <div class="card" tabindex="0" role="button" onclick="openScreen('jar')">
+      <div class="check-badge" id="badge-jar">✓</div>
+      <span class="icon">🫙</span>
+      <h3>Jar of Lovely Notes</h3>
+      <p>Tap the jar and let a tiny note from me find you.</p>
+      <div class="play-btn">Open</div>
     </div>
   </div>
 
@@ -639,19 +651,26 @@
   <div class="flower-field" id="flowerField"></div>
 </div>
 
-<!-- CATS GAME -->
-<div class="screen" id="screen-cats">
+<!-- JAR OF LOVELY NOTES GAME -->
+<div class="screen" id="screen-jar">
   <div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div>
-  <h2 class="game-title">Rescue Cats</h2>
-  <p class="game-sub">Click each pin to pull it free. Once every pin is out, the cage opens and the kitten runs off happy.</p>
-  <div class="goal-track">Rescued: <span id="catsScore">0</span></div>
-  <div class="cat-field">
-    <div class="cage" id="cage">
-      <div class="cage-door" id="cageDoor"></div>
-      <span class="cat-emoji" id="catEmoji">🐱</span>
+  <h2 class="game-title">Jar of Lovely Notes</h2>
+  <p class="game-sub">Tap the jar whenever you need a little reminder from me. There is no bad day here, only another note waiting for you.</p>
+  <div class="jar-game">
+    <div class="jar-count" id="jarCount">Notes opened: 0 / 8</div>
+    <div class="jar-scene">
+      <div class="jar-glow"></div>
+      <div class="jar" id="lovelyJar" role="button" tabindex="0" aria-label="Tap the jar for a lovely note">
+        <div class="jar-neck"></div><div class="jar-lid"></div>
+        <span class="jar-note" style="--r:-14deg"></span><span class="jar-note" style="--r:9deg"></span><span class="jar-note" style="--r:-4deg"></span><span class="jar-note" style="--r:15deg"></span><span class="jar-note" style="--r:-10deg"></span><span class="jar-note" style="--r:6deg"></span>
+        <div class="jar-label">for my bebi ♡</div>
+      </div>
     </div>
-    <div class="pins-row" id="pinsRow"></div>
-    <div class="cat-caption" id="catCaption"></div>
+    <div class="lovely-note" id="lovelyNote" aria-live="polite">
+      <div class="note-kind" id="noteKind">a note for you</div>
+      <div class="note-text" id="noteText">Tap the jar, meri jaan. I put something in there for you. 💌</div>
+    </div>
+    <div class="jar-hint">Tap the jar again whenever you want another one.</div>
   </div>
 </div>
 
@@ -667,7 +686,7 @@
 <div class="screen" id="screen-final">
   <div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div>
   <div class="final-card">
-    <div class="display">You cleared all six ✨</div>
+    <div class="display">You found all my little reminders ✨</div>
     <div id="finalMessage"></div>
     <div class="sign-off" id="finalSignOff"></div>
   </div>
@@ -693,143 +712,128 @@ const YOUR_NAME = "me";           // e.g. "Aditya"
 
 const messagesByGame = {
   memory: [
-    "You have such a good memory, probably because you remember every reason I fell for you in the first place.",
-    "Match found. Just like us, honestly. Some things just fit.",
-    "You're doing amazing. Also, you're really pretty. Both facts, completely unrelated to this game.",
-    "I love how you get quietly focused on little things like this, meri jaan. It's one of my favorite versions of you.",
-    "Every flower you matched, I matched with a memory of you. Sappy, I know. I don't care.",
-    "You're better at this than me, which honestly tracks. You're better at most things than me."
+    "Match found. Just like us, honestly. Some things just fit. 🤍",
+    "Meri jaan, you are allowed to take up space, take your time, and be exactly where you are today.",
+    "You did it! And yes, I am ridiculously proud of you for something this tiny. That's what boyfriends are for.",
+    "If I could save every sweet memory with you in a little box, I would need a whole room.",
+    "My bebi, nothing about a difficult day makes you less lovable. Not even a little.",
+    "You don't have to earn my love by being okay. You already have it."
   ],
   bubble: [
-    "Every bubble you popped is one less thing sitting on your mind, even for a second. Slow down, breathe, you're doing great.",
-    "Look at you go. I'm proud of you, migraine and all, for just showing up today.",
-    "That was oddly satisfying, right? Kind of like talking to you, honestly.",
-    "I hope each pop felt like a tiny bit of pressure lifting, the way you deserve right now, meri jaan.",
-    "You're allowed to do absolutely nothing productive today except pop bubbles and let me take care of you a little.",
-    "If I could pop every bit of pain in your head as easily as these bubbles, I would, over and over."
+    "One little pop for every unnecessary worry. I wish feelings worked that easily. 🤍",
+    "Look at you go, meri jaan. Tiny victory, but still a victory. I'm cheering from my side of the screen.",
+    "If I could send you a hug through the screen, this bubble would be carrying it.",
+    "My bebi, breathe. You do not have to solve everything today. One small moment at a time.",
+    "You are allowed to have days where all you manage is getting through them. That still counts.",
+    "Whatever is going on is not a measure of your worth. I hope you remember that when your brain gets mean."
   ],
   star: [
-    "You just caught 16 stars. I'd hand you the real ones if I could figure out how.",
-    "Nice reflexes. Also nice everything else about you, while we're handing out compliments.",
-    "That basket doesn't know how lucky it is to catch the things you send its way.",
-    "You reach for things gently but you don't miss, on this game and honestly in general.",
-    "Every star you caught, imagine it's a tiny reminder that I'm thinking about you today, meri jaan.",
-    "You make catching falling stars look easy. You make a lot of things look easy."
+    "You caught 16 stars. I'd hand you the real ones if distance wasn't being annoying again. ✨",
+    "Meri jaan, you are still my favorite person on the planet, even from very, very far away.",
+    "Every star is a tiny reminder: I am thinking of you on my side of this LDR too.",
+    "My bebi, you don't have to be strong every second. You can be soft with me.",
+    "Distance can keep my arms away, but it cannot make me love you any less.",
+    "You are worth patience, reassurance, softness, and ridiculous amounts of affection."
   ],
   flower: [
-    "Confirmed. Peer reviewed by one very biased flower.",
-    "The petals agree with me, meri jaan. I told you so.",
-    "Science has spoken, and science has excellent taste.",
-    "I would argue with the results, but they happen to be correct, so.",
-    "That flower did not even hesitate. Smart plant.",
-    "Somewhere a florist is very proud of that outcome.",
-    "It was always going to land there. I may have rigged it slightly. Do not tell anyone.",
-    "Case closed. Verdict: loved, thoroughly, meri jaan."
+    "The petals agree: loved. Thoroughly. No appeal necessary. 🌸",
+    "Meri jaan, this flower had one job and it absolutely understood the assignment.",
+    "Every petal says the same thing because I refuse to let a flower start unnecessary drama.",
+    "My bebi, you are not at fault for every hard thing happening around you. Please don't carry all of it like it belongs to you.",
+    "No matter how today feels, my answer stays the same: I love you.",
+    "Official flower verdict: precious, loved, slightly silly, and very much mine to adore."
   ],
-  cats: [
-    "Freed! That one owes you a lifetime of headbutts.",
-    "Another rescue. You're surprisingly good at this, meri jaan.",
-    "The cat has no idea how close that was. You do.",
-    "Pulled clean. That pin never stood a chance.",
-    "One more safe. At this point you're basically running a shelter.",
-    "That kitten is already planning to nap on your favorite hoodie.",
-    "Gently does it. You always know exactly how much pressure to use.",
-    "Rescue count rising. The cats are unionizing in your honor."
+  quiz: [
+    "Correct, meri jaan. But remember: you never need to perform happiness for me. You can just be you.",
+    "That's my bebi. Distance is annoying, but my love is not going anywhere.",
+    "Exactly. Your feelings are allowed to exist. You don't have to apologize for having them.",
+    "Correct. If something is hurting you, that does not automatically make it your fault.",
+    "Yes. You deserve kindness from yourself too, especially on the days you are struggling.",
+    "Perfect. And for the record, I am always in your corner, even when you are not feeling like yourself.",
+    "Correct answer, cute girl. Now accept this completely unbiased fact: you are deeply loved.",
+    "Yep. You are allowed to rest without feeling guilty. Existing is not a productivity contest."
+  ],
+  jar: [
+    "The jar says: meri jaan, you are loved from one side of this distance to the other. No fine print. 💗",
+    "My bebi, tiny silly reminder: I would absolutely still choose you after hearing the same story 47 times.",
+    "Confidence note: look at you. You made it through another day. That is not nothing, meri jaan.",
+    "Funny note: if hugs could travel by Wi-Fi, your internet would be permanently overloaded because I sent you 900.",
+    "Silly note: official LDR law says I am allowed to steal exactly one forehead kiss when we meet. Maybe twelve.",
+    "Soft note: whatever is happening right now does not make you difficult, broken, or a burden. You are still you, and I still adore you.",
+    "Reminder: not everything that goes wrong is yours to fix. You do not have to blame yourself for things outside your control.",
+    "Meri jaan, you never have to prove that you deserve love. You already do. On good days, bad days, quiet days, all of them.",
+    "My bebi, if today feels heavy, let me carry a little of it with you. You do not have to carry everything alone.",
+    "Confident girl reminder: you are capable, lovable, funny, beautiful, and allowed to ask for reassurance when you need it.",
+    "A tiny truth from your boyfriend: distance has made me appreciate every little thing about you approximately 9000% more.",
+    "Emergency silly note: I have consulted three experts and all three agree you need a hug, a snack, and me being annoying beside you."
   ]
 };
 
-const catsFirstTargetMessage = "Six kittens rescued, zero regrets. You're basically a hero now, meri jaan. Keep going if you want, more keep showing up and they get a little trickier each time.";
-
 const wrongReplies = [
-  "Close, but I will allow it because you are cute.",
-  "Wrong answer, correct energy though.",
-  "Not quite, but I like how your brain works.",
-  "Eh, still a win in my book."
+  "No stress, my bebi. That answer does not change how much I love you. 🤍",
+  "Close one, meri jaan. And hey, you are never in trouble for getting a question wrong.",
+  "Not quite — but I am still smiling at you through the screen.",
+  "Wrong answer, zero punishment. Come here, you get a virtual hug instead. 🫂"
 ];
 
-// Edit these to be about the two of you specifically. Defaults below
-// are safe and playful so the quiz still works even if left as is.
 const QUIZ_QUESTIONS = [
   {
-    q: "On a scale of meh to my entire world, how much do I love you?",
-    options: ["Meh", "Quite a bit", "So much", "My entire world, obviously"],
-    correct: 3,
-    reply: "Correct. Also the only acceptable answer, meri jaan."
-  },
-  {
-    q: "If I could give you one superpower right now, what would it be?",
-    options: ["Instant migraine cure", "Teleport to me", "Read my mind (it's just you, on loop)", "Honestly, all three"],
-    correct: 3,
-    reply: "Yep. I would hand over the whole utility belt if I could."
-  },
-  {
-    q: "What is my official medical opinion on your bad days?",
-    options: ["Rest and hydrate", "You're still my favorite person", "Text me immediately", "All of the above, no negotiating"],
-    correct: 3,
-    reply: "Correct diagnosis. I did not go to medical school for this but I stand by it."
-  },
-  {
-    q: "Why did I really make this website?",
-    options: ["I was bored", "To flex my HTML skills", "Because I love you and hated that you felt unwell", "Definitely not the second one"],
-    correct: 2,
-    reply: "Right answer. The HTML skills were a happy accident."
-  },
-  {
-    q: "What happens every time you laugh at something dumb I say?",
-    options: ["Nothing much", "I feel very smug about it", "My whole day gets a little better", "I start planning the next dumb thing to say"],
-    correct: 2,
-    reply: "Exactly. You have no idea the power you hold, meri jaan."
-  },
-  {
-    q: "Pick the correct definition of meri jaan.",
-    options: ["A type of dessert", "My life, my love", "A Bollywood plot twist", "Something you will hear a lot around here"],
+    q: "When you are having a really hard day, what do I want you to remember first?",
+    options: ["That you have to fix everything", "That you are loved and do not have to handle it alone", "That you should hide how you feel", "That you have disappointed me"],
     correct: 1,
-    reply: "Correct, and yes, option four is also true."
+    reply: "Exactly, meri jaan. You never have to hide the messy parts from me. I want the real you, not a version pretending everything is fine."
   },
   {
-    q: "What is the fastest way to make me smile from across a room?",
-    options: ["Wave at me", "Just exist, honestly", "Send a meme", "Roll your eyes at something I said"],
-    correct: 1,
-    reply: "Correct. You do not even have to try, that is the annoying part."
-  },
-  {
-    q: "Rank in order of importance: your comfort, my ego, snacks.",
-    options: ["Ego, snacks, comfort", "Snacks, ego, comfort", "Your comfort first, then snacks", "There is no version where my ego wins"],
+    q: "What does distance change about how much I care about you?",
+    options: ["Everything", "A little", "Absolutely nothing", "It makes me forget you"],
     correct: 2,
-    reply: "Correct order. Snacks remain a close second though."
+    reply: "Correct, my bebi. Distance changes where I can hug you, not whether I want to."
   },
   {
-    q: "What do I think when you send a 3am can't sleep text?",
-    options: ["Mild annoyance", "Nothing, I'm asleep", "I'm already typing back before I open my eyes", "I pretend to be annoyed. I'm not"],
+    q: "If something goes wrong around you, whose fault is it automatically?",
+    options: ["Yours", "Mine", "Whoever is easiest to blame", "Nobody's automatically — we figure out what is actually yours to carry"],
+    correct: 3,
+    reply: "Yes. Please keep that one close. You do not have to turn every difficult thing into evidence against yourself."
+  },
+  {
+    q: "What are you allowed to ask me for when you need it?",
+    options: ["Reassurance", "A little extra attention", "A virtual hug and some softness", "All of the above"],
+    correct: 3,
+    reply: "All of it. Ask, meri jaan. You are not needy for wanting comfort from someone who loves you."
+  },
+  {
+    q: "What happens to my love for you on your quiet, tired, or not-your-best days?",
+    options: ["It disappears", "It gets smaller", "Nothing — I still love you", "You have to earn it back"],
     correct: 2,
-    reply: "Correct. My phone knows your texts before I do at this point."
+    reply: "Exactly. You never need to earn your way back into my heart. You are already there."
   },
   {
-    q: "If today had a theme song, what should it be?",
-    options: ["Something loud and chaotic", "Something soft, for resting", "Whatever makes you smile right now", "Anything, as long as you're the one picking it"],
-    correct: 3,
-    reply: "Correct. DJ privileges are yours, meri jaan, always."
+    q: "Which sentence would I want you to believe about yourself?",
+    options: ["I am a burden", "I have to be perfect", "I am worthy of love and gentleness", "I should deal with everything alone"],
+    correct: 2,
+    reply: "YES. That one. Say it again if your brain is being rude: I am worthy of love and gentleness."
   },
   {
-    q: "What is my honest reaction to your bedhead, no makeup, tired face?",
-    options: ["Nothing changes, still adore you", "Slightly more adorable, actually", "Zero difference to how I feel", "All equally true, pick one"],
-    correct: 3,
-    reply: "Correct, they are all true, I just like watching you pick."
+    q: "In this LDR, what is one thing I want you to feel even when I am not physically there?",
+    options: ["Alone", "Forgotten", "Safe, loved, and remembered", "Like you have to be okay for me"],
+    correct: 2,
+    reply: "Correct, meri jaan. I want my love to feel like a little safe place you can come back to."
   },
   {
-    q: "Last question. What should you do the second you close this tab?",
-    options: ["Get some water", "Rest your eyes a bit", "Remember you're loved, loudly and often", "Yes. All of it. Right now"],
+    q: "Final question: if today is difficult, what do you owe yourself?",
+    options: ["Punishment", "More pressure", "A perfect explanation", "Patience, rest, and a reminder that you are still worthy"],
     correct: 3,
-    reply: "Perfect score. Now actually go do it, I mean it."
+    reply: "Perfect. Come here, my bebi. You are doing better than you think, and I am so, so proud of you."
   }
 ];
 
 const finalMessage = `
-  <p>Hey ${HER_NAME}. I know these past few days have been rough with the migraine, and I hate that I can't just reach through a screen and take it away for you. So instead I made you this, something small, a little silly, and hopefully something to smile at instead of scrolling through reels for a while.</p>
-  <p>You cleared every single level in here, which honestly does not surprise me one bit, because you're someone who shows up and finishes things, even the small dumb ones your boyfriend makes at midnight for no real reason except that he was thinking about you, meri jaan.</p>
-  <p>I hope today gets gentler from here. Rest properly, drink some water, keep the lights low if you need to, and don't push through anything you don't have to. And just so it's said plainly and not buried in a game: I love you, I'm thinking about you way more than you probably realize, and I'm not going anywhere.</p>
+  <p>Hey ${HER_NAME}. If you made it all the way here, I hope you have at least one tiny smile on your face. I made this little place because I wanted there to be something you could open whenever you needed a bit of softness from me, even when this stupid LDR puts miles between us.</p>
+  <p>Meri jaan, please remember this part most: <strong>you do not have to blame yourself for everything that is going wrong.</strong> Not every bad feeling is your fault. Not every difficult situation is yours to fix. You are allowed to be tired, confused, quiet, emotional, or just not okay sometimes. None of those things make you less lovable.</p>
+  <p>My bebi, you are worthy on the days you feel confident and on the days you cannot see anything good in yourself. You deserve patience, reassurance, kindness, rest, and love without having to earn any of it first. And from my side of this distance, I am still choosing you, cheering for you, and loving you.</p>
+  <p>So whenever things feel too loud, come back here. Tap the jar. Pluck a flower petal. Get one little reminder at a time. You don't have to carry the whole world tonight. Just take the next little step, and let me love you from over here until I can do it in person. 🤍</p>
 `;
-const finalSignOff = `With love, ${YOUR_NAME}, cheering for you from over here 🤍`;
+const finalSignOff = `Always yours, ${YOUR_NAME} — loving you across the distance 🤍`;
 /* ============================================================ */
 
 document.getElementById('finalMessage').innerHTML = finalMessage;
@@ -904,7 +908,7 @@ function floatHearts(count){
 }
 
 /* ---------- Screen navigation ---------- */
-const completed = { memory:false, bubble:false, star:false, flower:false, quiz:false, cats:false };
+const completed = { memory:false, bubble:false, star:false, flower:false, quiz:false, jar:false };
 
 function openScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -914,7 +918,7 @@ function openScreen(name){
   if(name==='star' && !starStarted) startStar();
   if(name==='flower' && !flowerStarted) startFlower();
   if(name==='quiz' && !quizStarted) startQuiz();
-  if(name==='cats' && !catsStarted) startCats();
+  if(name==='jar' && !jarStarted) startJar();
   if(name==='final') floatHearts(14);
 }
 
@@ -1107,166 +1111,302 @@ function buildFlowerRound(firstTime){
   const field = document.getElementById('flowerField');
   field.innerHTML = `
     <div class="phrase-label" id="phraseLabel">Pick a petal to begin</div>
-    <div class="flower-wrap" id="flowerWrap">
-      <span class="flower-emoji">🌼</span>
+    <div class="flower-wrap" id="flowerWrap" aria-label="A flower with petals to pluck">
+      <svg class="flower-svg" viewBox="0 0 330 330" role="img" aria-label="A pink flower with individual petals">
+        <path class="flower-stem" d="M165 208 C165 238 165 270 158 305"/>
+        <path class="flower-leaf" d="M161 264 C132 247 108 257 104 278 C127 285 148 279 161 264Z"/>
+        <path class="flower-leaf" d="M159 285 C188 265 211 274 217 293 C194 301 175 297 159 285Z"/>
+        <g id="petalGroup"></g>
+        <circle class="flower-center" cx="165" cy="151" r="32"/>
+        <circle cx="151" cy="142" r="4" fill="var(--gold-deep)"/><circle cx="178" cy="143" r="4" fill="var(--gold-deep)"/>
+        <circle cx="165" cy="157" r="4" fill="var(--gold-deep)"/><circle cx="153" cy="166" r="4" fill="var(--gold-deep)"/><circle cx="177" cy="166" r="4" fill="var(--gold-deep)"/>
+      </svg>
     </div>
   `;
-  const wrap = document.getElementById('flowerWrap');
+  const group = document.getElementById('petalGroup');
   const label = document.getElementById('phraseLabel');
-  const colors = ['#D998AC','#8FBFAE','#D9AE6E','#9C8DC7'];
-
-  // odd petal count guarantees the sequence starts and ends on "He loves me"
-  const petalCount = pickRandom([7, 9, 11]);
-  const center = 115, radius = 78;
-  let index = 0;
-  let done = false;
+  const petalCount = 12;
+  const cx=165, cy=151, rx=47, ry=76;
+  let plucked=0;
+  let done=false;
+  const petalColors=['#D998AC','#E2A5B7','#C77E95','#DFA6C0'];
 
   for(let i=0;i<petalCount;i++){
-    const angle = (360/petalCount)*i;
-    const rad = angle * Math.PI / 180;
-    const x = center + radius*Math.sin(rad) - 12;
-    const y = center - radius*Math.cos(rad) - 20;
-    const petal = document.createElement('div');
-    petal.className = 'petal';
-    petal.style.left = x+'px';
-    petal.style.top = y+'px';
-    petal.style.transform = `rotate(${angle}deg)`;
-    petal.style.background = colors[i % colors.length];
-    petal.addEventListener('click', ()=>{
+    const angle=(360/petalCount)*i;
+    const rad=angle*Math.PI/180;
+    const x=cx + rx*Math.sin(rad);
+    const y=cy - ry*Math.cos(rad);
+    const petal=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    petal.setAttribute('class','petal');
+    petal.setAttribute('cx',x);
+    petal.setAttribute('cy',y);
+    petal.setAttribute('rx','25');
+    petal.setAttribute('ry','49');
+    petal.setAttribute('fill',petalColors[i%petalColors.length]);
+    petal.setAttribute('stroke','#B86F87');
+    petal.setAttribute('stroke-width','2');
+    petal.setAttribute('transform',`rotate(${angle} ${x} ${y})`);
+    petal.style.setProperty('--dx', `${Math.sin(rad)*55}px`);
+    petal.style.setProperty('--dy', `${Math.cos(rad)*55}px`);
+    petal.setAttribute('tabindex','0');
+    petal.setAttribute('role','button');
+    petal.setAttribute('aria-label','Pluck this petal');
+    const pluck=()=>{
       if(done || petal.classList.contains('plucked')) return;
-      const phrase = (index % 2 === 0) ? "He loves me..." : "He loves me not...";
-      label.textContent = phrase;
-      petal.style.transform = `translate(${Math.sin(rad)*45}px, ${-Math.cos(rad)*45}px) rotate(${angle}deg) scale(0.4)`;
       petal.classList.add('plucked');
-      index++;
-      if(index === petalCount){
-        done = true;
+      plucked++;
+      label.textContent = plucked % 2 ? 'He loves me... obviously 💗' : 'He loves me... still obviously 💗';
+      if(plucked===petalCount){
+        done=true;
         setTimeout(()=>{
-          label.textContent = "He loves me. ❤";
-          label.style.color = 'var(--sage)';
-          if(firstTime){
-            markComplete('flower');
-            showModal('flower');
-          } else {
-            sparkleBurst();
-          }
-          const restart = document.createElement('button');
-          restart.className = 'flower-restart';
-          restart.textContent = 'Pick another flower';
-          restart.addEventListener('click', ()=> buildFlowerRound(false));
+          label.textContent='He loves me. Every single time. 🌸';
+          label.style.color='var(--sage)';
+          if(firstTime){ markComplete('flower'); showModal('flower'); } else { sparkleBurst(); }
+          const restart=document.createElement('button');
+          restart.className='flower-restart';
+          restart.textContent='Grow another flower';
+          restart.addEventListener('click',()=>buildFlowerRound(false));
           field.appendChild(restart);
-        }, 450);
+        },420);
       }
-    });
-    wrap.appendChild(petal);
+    };
+    petal.addEventListener('click',pluck);
+    petal.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); pluck(); } });
+    group.appendChild(petal);
   }
 }
 
-/* ============ RESCUE CATS ============ */
-let catsStarted = false;
-let catsRescued = 0;
-const CATS_TARGET = 6;
-function startCats(){
-  catsStarted = true;
-  catsRescued = 0;
-  document.getElementById('catsScore').textContent = 0;
-  document.getElementById('catCaption').textContent = '';
-  renderCage(1);
+/* ============ JAR OF LOVELY NOTES ============ */
+let jarStarted=false;
+let jarOpened=0;
+let jarNotes=[];
+const JAR_TARGET=8;
+function startJar(){
+  jarStarted=true;
+  jarOpened=0;
+  jarNotes=[...messagesByGame.jar].sort(()=>Math.random()-0.5);
+  document.getElementById('jarCount').textContent='Notes opened: 0 / 8';
+  const note=document.getElementById('lovelyNote');
+  note.classList.remove('show');
+  document.getElementById('noteText').textContent='Tap the jar, meri jaan. I put something in there for you. 💌';
+  document.getElementById('noteKind').textContent='a note for you';
+  const jar=document.getElementById('lovelyJar');
+  const open=()=>drawLovelyNote();
+  jar.addEventListener('click',open);
+  jar.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
 }
-
-function renderCage(pinCount){
-  const cage = document.getElementById('cage');
-  const door = document.getElementById('cageDoor');
-  const cat = document.getElementById('catEmoji');
-  const pinsRow = document.getElementById('pinsRow');
-
-  door.classList.remove('open');
-  cat.classList.remove('escape');
-  pinsRow.innerHTML = '';
-
-  let remaining = pinCount;
-  for(let i=0;i<pinCount;i++){
-    const pin = document.createElement('div');
-    pin.className = 'pin';
-    pin.addEventListener('click', ()=>{
-      if(pin.classList.contains('pulled')) return;
-      pin.classList.add('pulled');
-      remaining--;
-      if(remaining <= 0){
-        freeCat(pinCount);
-      }
-    });
-    pinsRow.appendChild(pin);
-  }
-}
-
-function freeCat(lastPinCount){
-  const door = document.getElementById('cageDoor');
-  const cat = document.getElementById('catEmoji');
-  door.classList.add('open');
-  cat.classList.add('escape');
-  catsRescued++;
-  document.getElementById('catsScore').textContent = catsRescued;
-  document.getElementById('catCaption').textContent = pickRandom(messagesByGame.cats);
+function drawLovelyNote(){
+  if(!jarNotes.length) jarNotes=[...messagesByGame.jar].sort(()=>Math.random()-0.5);
+  const text=jarNotes.shift();
+  jarOpened++;
+  const kinds=['cute','silly','funny','confidence boost','soft reminder','LDR note'];
+  document.getElementById('noteKind').textContent=pickRandom(kinds);
+  const note=document.getElementById('lovelyNote');
+  note.classList.remove('show');
+  void note.offsetWidth;
+  document.getElementById('noteText').textContent=text;
+  note.classList.add('show');
+  document.getElementById('jarCount').textContent=`Notes opened: ${Math.min(jarOpened,JAR_TARGET)} / ${JAR_TARGET}`;
   sparkleBurst();
-
-  if(catsRescued === CATS_TARGET){
-    markComplete('cats');
-    setTimeout(()=> showModal('cats', catsFirstTargetMessage), 500);
+  if(jarOpened===JAR_TARGET){
+    markComplete('jar');
+    setTimeout(()=>showModal('jar', 'Eight little notes, and I still have a whole jar full of reasons to adore you, my bebi. Keep tapping whenever you need one. 💗'),350);
   }
-
-  setTimeout(()=>{
-    const nextPinCount = Math.min(1 + Math.floor(catsRescued/2), 5);
-    renderCage(nextPinCount);
-  }, 1300);
 }
 
 /* ============ LOVE NOTES QUIZ ============ */
 let quizStarted = false;
 function startQuiz(){
-  quizStarted = true;
-  let index = 0;
-  const card = document.getElementById('quizCard');
+  quizStarted=true;
+  let index=0;
+  const card=document.getElementById('quizCard');
 
   function renderQuestion(){
-    if(index >= QUIZ_QUESTIONS.length){
+    if(index>=QUIZ_QUESTIONS.length){
       markComplete('quiz');
-      showModal('quiz', "Every answer was correct because every answer was about you. Perfect score, meri jaan.");
+      showModal('quiz','You made it through all of them, meri jaan. I hope at least one answer stayed with you: you are loved, you are worthy, and you do not have to carry everything alone.');
       return;
     }
-    const item = QUIZ_QUESTIONS[index];
-    card.innerHTML = `
+    const item=QUIZ_QUESTIONS[index];
+    card.innerHTML=`
       <div class="quiz-question">${item.q}</div>
       <div class="quiz-options" id="quizOptions"></div>
       <div class="quiz-reply" id="quizReply"></div>
+      <button class="quiz-next" id="quizNext" style="display:none">Next 💌</button>
       <div class="quiz-progress">Question ${index+1} of ${QUIZ_QUESTIONS.length}</div>
     `;
-    const optsWrap = document.getElementById('quizOptions');
-    const replyEl = document.getElementById('quizReply');
-    item.options.forEach((opt, i)=>{
-      const btn = document.createElement('button');
-      btn.className = 'quiz-option';
-      btn.textContent = opt;
-      btn.addEventListener('click', ()=>{
-        if(btn.dataset.locked) return;
-        optsWrap.querySelectorAll('.quiz-option').forEach(o=> o.dataset.locked = "1");
-        if(i === item.correct){
+    const optsWrap=document.getElementById('quizOptions');
+    const replyEl=document.getElementById('quizReply');
+    const nextBtn=document.getElementById('quizNext');
+    let answered=false;
+    item.options.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='quiz-option';
+      btn.textContent=opt;
+      btn.addEventListener('click',()=>{
+        if(answered) return;
+        answered=true;
+        optsWrap.querySelectorAll('.quiz-option').forEach(o=>o.dataset.locked='1');
+        if(i===item.correct){
           btn.classList.add('correct');
-          replyEl.textContent = item.reply;
-        } else {
+          replyEl.textContent=item.reply;
+        }else{
           btn.classList.add('wrong');
           optsWrap.children[item.correct].classList.add('correct');
-          replyEl.textContent = pickRandom(wrongReplies) + " " + item.reply;
+          replyEl.textContent=pickRandom(wrongReplies)+' '+item.reply;
         }
         replyEl.classList.add('show');
-        setTimeout(()=>{ index++; renderQuestion(); }, 1600);
+        nextBtn.style.display='inline-block';
+        nextBtn.textContent=index===QUIZ_QUESTIONS.length-1 ? 'Finish & read my note 💗' : 'Next 💌';
+        nextBtn.focus();
       });
       optsWrap.appendChild(btn);
     });
+    nextBtn.addEventListener('click',()=>{index++;renderQuestion();});
   }
-
   renderQuestion();
 }
+
+</script>
+
+<div id="end-game-controls" class="end-game-controls" hidden>
+  <button type="button" id="end-refresh-btn" class="end-game-btn">↻ Play Again</button>
+  <button type="button" id="end-arcade-btn" class="end-game-btn secondary">♡ Back to Arcade</button>
+</div>
+
+<script id="cozy-enhancements">
+(function(){
+  const notePool = [
+    "Meri jaan, if today feels heavy, you don't have to carry it perfectly. I'm still right here. ♡",
+    "My bebi, you are so much more than one bad day, one mistake, or one difficult moment.",
+    "If I could teleport right now, I'd be beside you stealing one hug and refusing to let go.",
+    "Meri jaan, you don't have to earn my love. You already have it. Completely.",
+    "My bebi, please remember: being tired doesn't make you weak. Needing comfort doesn't make you a burden.",
+    "Tiny reminder from your very clingy boyfriend: you are ridiculously lovable.",
+    "Meri jaan, somewhere out here is a person smiling because you exist. Yep. Me.",
+    "My bebi, you are allowed to take things one little step at a time. No rushing your heart.",
+    "If I were there, this note would come with a forehead kiss. Unfortunately, distance is being annoying again.",
+    "Meri jaan, whatever is going on around you, please don't automatically make it your fault. You deserve gentleness too.",
+    "My bebi, you don't need to have all the answers today. Just breathe. I'm proud of you for getting through it.",
+    "Official announcement: you are cute. Appeals are not being accepted.",
+    "Meri jaan, I hope you know how deeply I believe in you, even on the days you don't believe in yourself.",
+    "My bebi, distance can keep our hands apart for a while, but it doesn't get to decide how close our hearts are.",
+    "You are not difficult to love. You are not too much. You are you, and that's my favorite part.",
+    "Meri jaan, if you need a soft place to land, imagine my arms around you until I can make that real.",
+    "My bebi, please give yourself the same kindness you'd give me if I were having a hard day.",
+    "Silly note: I have conducted extensive research and concluded that you owe me approximately 47 hugs.",
+    "Meri jaan, your worth doesn't shrink because something didn't go the way you hoped.",
+    "My bebi, I'm cheering for you in the quiet moments too—the ones nobody else sees.",
+    "You make ordinary days feel a little more special just by being part of them.",
+    "Meri jaan, you never have to pretend you're okay just to make me comfortable. Tell me what your heart needs.",
+    "My bebi, one day this distance will be a story we tell while sitting next to each other.",
+    "No fixing required, no perfect words required. Sometimes you just need someone to stay. I'm staying.",
+    "Meri jaan, you are precious to me on your best days, your messy days, and every ordinary day in between.",
+    "My bebi, I hope this tiny note reminds you that someone is thinking about you with an embarrassingly big smile.",
+    "You don't have to apologize for having feelings. Your feelings deserve a little room too.",
+    "Meri jaan, if the world gets loud, come back to this: you are loved, you matter, and you are not alone.",
+    "My bebi, I'm proud of the person you are becoming, and I love the person you are right now.",
+    "One tiny virtual kiss delivered across the distance. Please accept it immediately. ♡"
+  ];
+
+  window.cozyLovelyNotes = notePool;
+
+  function setTopMessage(text){
+    const el=document.getElementById("game-top-message-text");
+    if(el) el.textContent=text;
+  }
+
+  function showEndControls(){
+    const box=document.getElementById("end-game-controls");
+    if(box) box.hidden=false;
+  }
+  function hideEndControls(){
+    const box=document.getElementById("end-game-controls");
+    if(box) box.hidden=true;
+  }
+
+  window.cozyGameFinished=function(message){
+    setTopMessage(message || "Meri jaan, you did it. I'm proud of you. ♡");
+    showEndControls();
+  };
+
+  document.addEventListener("DOMContentLoaded", function(){
+    const refresh=document.getElementById("end-refresh-btn");
+    const arcade=document.getElementById("end-arcade-btn");
+
+    refresh && refresh.addEventListener("click", function(){
+      hideEndControls();
+      location.reload();
+    });
+
+    arcade && arcade.addEventListener("click", function(){
+      hideEndControls();
+      const arcadeTarget =
+        document.querySelector("#arcade") ||
+        document.querySelector(".arcade") ||
+        document.querySelector("[data-screen='arcade']") ||
+        document.querySelector("[data-page='arcade']");
+      if(arcadeTarget){
+        document.querySelectorAll("section, .screen, .page, .game").forEach(x=>x.classList.remove("active"));
+        arcadeTarget.classList.add("active");
+        arcadeTarget.scrollIntoView({behavior:"smooth",block:"start"});
+      }else{
+        // Fall back to the existing arcade navigation if the page has one.
+        const back = Array.from(document.querySelectorAll("button,a")).find(x =>
+          /arcade/i.test((x.textContent||"").trim())
+        );
+        if(back) back.click();
+        else window.scrollTo({top:0,behavior:"smooth"});
+      }
+      setTopMessage("Meri jaan, choose whatever you want to play next. No pressure, just fun. ♡");
+    });
+
+    // Let the jar use the expanded note pool if the existing code looks for a global list.
+    window.lovelyNotes = notePool;
+    window.jarNotes = notePool;
+
+    // Make the ending Bubble Drift message contain the requested phrase.
+    const all = document.querySelectorAll("p,div,span,h1,h2,h3,button");
+    all.forEach(el=>{
+      const t=(el.textContent||"").trim();
+      if(/bubble drift/i.test(t) && /complete|finish|end|done/i.test(t)){
+        const parent=el.parentElement;
+        if(parent && !parent.dataset.cozyBubbleEnding){
+          parent.dataset.cozyBubbleEnding="1";
+          const m=document.createElement("div");
+          m.className="bubble-ending-message";
+          m.style.cssText="margin-top:12px;line-height:1.5;";
+          m.textContent="Meri jaan, you made it through, like you did with these bubbles one by one. ♡";
+          parent.appendChild(m);
+        }
+      }
+    });
+  });
+
+  // Expose a helper for any existing game's completion code.
+  window.finishCozyGame=window.cozyGameFinished;
+})();
+</script>
+
+<script id="flower-petal-normalizer">
+(function(){
+  function normalizeFlower(){
+    const root=document.querySelector("#flower-game svg");
+    if(!root) return;
+    const petals=[...root.querySelectorAll(".petal")];
+    if(!petals.length) return;
+    const cx=200, cy=150, radius=68;
+    petals.forEach((p,i)=>{
+      const angle=(i/petals.length)*Math.PI*2-Math.PI/2;
+      const x=cx+Math.cos(angle)*radius;
+      const y=cy+Math.sin(angle)*radius;
+      p.setAttribute("transform","translate("+x+" "+y+") rotate("+(angle*180/Math.PI+90)+")");
+      p.dataset.flowerAngle=angle;
+    });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",normalizeFlower);
+  else normalizeFlower();
+})();
 </script>
 </body>
 </html>
