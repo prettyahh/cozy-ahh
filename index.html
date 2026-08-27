@@ -613,6 +613,75 @@
 .end-game-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.14);}
 .end-game-btn.secondary{background:rgba(255,255,255,.72);}
 
+
+  /* ---------- Finished-game controls ---------- */
+  .game-top-message{
+    width:min(720px,92vw);
+    margin:16px auto 12px;
+    text-align:center;
+    padding:13px 18px;
+    border-radius:18px;
+    background:rgba(255,248,244,.96);
+    color:#5a3f4d;
+    box-shadow:0 7px 22px rgba(15,10,25,.16);
+    font-size:clamp(14px,2vw,17px);
+    line-height:1.5;
+    position:relative;
+    z-index:10;
+  }
+  .game-top-message-heart{font-size:20px;margin-bottom:2px;}
+  .end-game-controls{
+    width:min(720px,92vw);
+    margin:12px auto 24px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:30;
+  }
+  .end-game-controls[hidden]{display:none!important;}
+  .end-game-btn{
+    border:0;
+    border-radius:999px;
+    padding:9px 17px;
+    font:inherit;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    background:#fff8f4;
+    color:#5a3f4d;
+    box-shadow:0 5px 16px rgba(15,10,25,.12);
+    transition:transform .15s ease,box-shadow .15s ease,background .2s ease;
+  }
+  .end-game-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(15,10,25,.17);
+    background:#fff;
+  }
+  .end-game-btn.secondary{background:rgba(255,248,244,.78);}
+  .cert-card{
+    background:
+      radial-gradient(circle at 50% 0%, rgba(217,174,110,.20), transparent 34%),
+      linear-gradient(180deg,#fff8e9 0%,#efe2c3 100%);
+    border:4px solid var(--gold);
+    box-shadow:0 18px 45px rgba(15,10,25,.38),inset 0 0 0 5px rgba(255,255,255,.35);
+  }
+  .cert-card::after{
+    content:"♡  ✦  ♡";
+    position:absolute;
+    left:50%;
+    bottom:9px;
+    transform:translateX(-50%);
+    color:var(--gold-deep);
+    font-size:13px;
+    letter-spacing:.22em;
+    pointer-events:none;
+  }
+  .cert-title{letter-spacing:.01em;}
+  .cert-sub{font-weight:700;}
+
 </style>
 </head>
 <body>
@@ -706,6 +775,11 @@
   <p class="game-sub">Find all 8 matching pairs</p>
   <div class="goal-track">Pairs found: <span id="memoryScore">0</span> / 8</div>
   <div class="memory-grid" id="memoryGrid"></div>
+  <div class="game-top-message" id="top-message-memory" hidden></div>
+  <div class="end-game-controls" id="end-controls-memory" hidden>
+    <button type="button" class="end-game-btn" onclick="playAgain('memory')">↻ Play Again</button>
+    <button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button>
+  </div>
 </div>
 
 <!-- BUBBLE GAME -->
@@ -715,6 +789,11 @@
   <p class="game-sub">Tap the bubbles as they float by, slow and easy</p>
   <div class="goal-track">Popped: <span id="bubbleScore">0</span> / 26</div>
   <div class="bubble-field" id="bubbleField"></div>
+  <div class="game-top-message" id="top-message-bubble" hidden></div>
+  <div class="end-game-controls" id="end-controls-bubble" hidden>
+    <button type="button" class="end-game-btn" onclick="playAgain('bubble')">↻ Play Again</button>
+    <button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button>
+  </div>
 </div>
 
 <!-- STAR GAME -->
@@ -725,6 +804,11 @@
   <div class="goal-track">Caught: <span id="starScore">0</span> / 20</div>
   <div class="star-field" id="starField">
     <div class="basket" id="basket" style="left:50%;">🧺</div>
+  <div class="game-top-message" id="top-message-star" hidden></div>
+  <div class="end-game-controls" id="end-controls-star" hidden>
+    <button type="button" class="end-game-btn" onclick="playAgain('star')">↻ Play Again</button>
+    <button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button>
+  </div>
   </div>
 </div>
 
@@ -734,6 +818,11 @@
   <h2 class="game-title">He Loves Me, He Loves Me Not</h2>
   <p class="game-sub">Pluck one petal at a time. Spoiler: this flower is a hopeless romantic.</p>
   <div class="flower-field" id="flowerField"></div>
+  <div class="game-top-message" id="top-message-flower" hidden></div>
+  <div class="end-game-controls" id="end-controls-flower" hidden>
+    <button type="button" class="end-game-btn" onclick="playAgain('flower')">↻ Play Again</button>
+    <button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button>
+  </div>
 </div>
 
 <!-- JAR OF LOVELY NOTES GAME -->
@@ -755,6 +844,11 @@
     </div>
     <div class="jar-hint">Tap the jar again whenever you want another one.</div>
   </div>
+  <div class="game-top-message" id="top-message-jar" hidden></div>
+  <div class="end-game-controls" id="end-controls-jar" hidden>
+    <button type="button" class="end-game-btn" onclick="playAgain('jar')">↻ Play Again</button>
+    <button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button>
+  </div>
 </div>
 
 <!-- QUIZ GAME -->
@@ -763,6 +857,11 @@
   <h2 class="game-title">Love Notes Quiz</h2>
   <p class="game-sub">There's no wrong answer here really, just pick whatever makes you smile</p>
   <div class="quiz-card" id="quizCard"></div>
+  <div class="game-top-message" id="top-message-quiz" hidden></div>
+  <div class="end-game-controls" id="end-controls-quiz" hidden>
+    <button type="button" class="end-game-btn" onclick="playAgain('quiz')">↻ Play Again</button>
+    <button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button>
+  </div>
 </div>
 
 <!-- FINAL SCREEN -->
@@ -782,7 +881,7 @@
   <div class="cert-card" id="certCard">
     <span class="cert-seal">🏅</span>
     <div class="cert-title">Certificate of Being Loved</div>
-    <div class="cert-sub">awarded with full honors</div>
+    <div class="cert-sub">Officially awarded with full honors ♡</div>
     <div class="cert-row">
       <div class="cert-label">Name</div>
       <div class="cert-value" id="certName">meri jaan</div>
@@ -793,10 +892,10 @@
     </div>
     <div class="cert-row">
       <div class="cert-label">Qualification</div>
-      <div class="cert-value" id="certQualification">best gf ever deserves all the love and is always loved by me</div>
+      <div class="cert-value" id="certQualification">Best girlfriend ever — deserving of all the love, always.</div>
     </div>
     <div class="cert-footer">
-      <div class="cert-sign" id="certSign">Always yours, me</div>
+      <div class="cert-sign" id="certSign">Always yours, me ♡</div>
       <div class="cert-date" id="certDate"></div>
     </div>
   </div>
@@ -996,6 +1095,11 @@ const finalSignOff = `Always yours, ${YOUR_NAME} — loving you across the dista
 document.getElementById('finalMessage').innerHTML = finalMessage;
 document.getElementById('finalSignOff').textContent = finalSignOff;
 
+window.addEventListener('DOMContentLoaded', ()=>{
+  const game=location.hash.replace('#','');
+  if(['memory','bubble','star','flower','quiz','jar'].includes(game)) openScreen(game);
+});
+
 const mascotLines = [
   "you've got this 🌙",
   "take your time, no rush",
@@ -1091,6 +1195,22 @@ function openScreen(name){
   if(name==='final') floatHearts(14);
 }
 
+function showGameEnd(game, message){
+  const msg=document.getElementById('top-message-'+game);
+  const controls=document.getElementById('end-controls-'+game);
+  if(msg){
+    msg.innerHTML='<div class="game-top-message-heart">♡</div>'+(message||"Meri jaan, you did it. I'm proud of you.");
+    msg.hidden=false;
+  }
+  if(controls) controls.hidden=false;
+  document.getElementById('screen-'+game)?.classList.add('game-ended');
+}
+
+function playAgain(game){
+  location.hash=game;
+  location.reload();
+}
+
 function markComplete(game){
   completed[game] = true;
   document.getElementById('badge-'+game).classList.add('show');
@@ -1101,9 +1221,7 @@ function markComplete(game){
 }
 
 function showModal(game, customMessage){
-  document.getElementById('modalTitle').textContent = "Level cleared! 🎉";
-  document.getElementById('modalMessage').textContent = customMessage || pickRandom(messagesByGame[game]);
-  document.getElementById('modalBackdrop').classList.add('show');
+  showGameEnd(game, customMessage || pickRandom(messagesByGame[game]));
   sparkleBurst();
 }
 function closeModal(){
@@ -1294,7 +1412,7 @@ function buildFlowerRound(firstTime){
   `;
   const group = document.getElementById('petalGroup');
   const label = document.getElementById('phraseLabel');
-  const petalCount = 12;
+  const petalCount = 11;
   const cx=165, cy=151, petalLen=78, petalWidth=19;
   let plucked=0;
   let done=false;
@@ -1330,7 +1448,7 @@ function buildFlowerRound(firstTime){
       if(done || petal.classList.contains('plucked')) return;
       petal.classList.add('plucked');
       plucked++;
-      label.textContent = plucked % 2 ? 'He loves me... obviously 💗' : 'He loves me... still obviously 💗';
+      label.textContent = plucked % 2 ? 'He loves me 💗' : 'He loves me not 💌';
       if(plucked===petalCount){
         done=true;
         setTimeout(()=>{
@@ -1582,125 +1700,6 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
   });
 })();
 
-</script>
-
-<div id="end-game-controls" class="end-game-controls" hidden>
-  <button type="button" id="end-refresh-btn" class="end-game-btn">↻ Play Again</button>
-  <button type="button" id="end-arcade-btn" class="end-game-btn secondary">♡ Back to Arcade</button>
-</div>
-
-<script id="cozy-enhancements">
-(function(){
-  const notePool = [
-    "Meri jaan, if today feels heavy, you don't have to carry it perfectly. I'm still right here. ♡",
-    "My bebi, you are so much more than one bad day, one mistake, or one difficult moment.",
-    "If I could teleport right now, I'd be beside you stealing one hug and refusing to let go.",
-    "Meri jaan, you don't have to earn my love. You already have it. Completely.",
-    "My bebi, please remember: being tired doesn't make you weak. Needing comfort doesn't make you a burden.",
-    "Tiny reminder from your very clingy boyfriend: you are ridiculously lovable.",
-    "Meri jaan, somewhere out here is a person smiling because you exist. Yep. Me.",
-    "My bebi, you are allowed to take things one little step at a time. No rushing your heart.",
-    "If I were there, this note would come with a forehead kiss. Unfortunately, distance is being annoying again.",
-    "Meri jaan, whatever is going on around you, please don't automatically make it your fault. You deserve gentleness too.",
-    "My bebi, you don't need to have all the answers today. Just breathe. I'm proud of you for getting through it.",
-    "Official announcement: you are cute. Appeals are not being accepted.",
-    "Meri jaan, I hope you know how deeply I believe in you, even on the days you don't believe in yourself.",
-    "My bebi, distance can keep our hands apart for a while, but it doesn't get to decide how close our hearts are.",
-    "You are not difficult to love. You are not too much. You are you, and that's my favorite part.",
-    "Meri jaan, if you need a soft place to land, imagine my arms around you until I can make that real.",
-    "My bebi, please give yourself the same kindness you'd give me if I were having a hard day.",
-    "Silly note: I have conducted extensive research and concluded that you owe me approximately 47 hugs.",
-    "Meri jaan, your worth doesn't shrink because something didn't go the way you hoped.",
-    "My bebi, I'm cheering for you in the quiet moments too—the ones nobody else sees.",
-    "You make ordinary days feel a little more special just by being part of them.",
-    "Meri jaan, you never have to pretend you're okay just to make me comfortable. Tell me what your heart needs.",
-    "My bebi, one day this distance will be a story we tell while sitting next to each other.",
-    "No fixing required, no perfect words required. Sometimes you just need someone to stay. I'm staying.",
-    "Meri jaan, you are precious to me on your best days, your messy days, and every ordinary day in between.",
-    "My bebi, I hope this tiny note reminds you that someone is thinking about you with an embarrassingly big smile.",
-    "You don't have to apologize for having feelings. Your feelings deserve a little room too.",
-    "Meri jaan, if the world gets loud, come back to this: you are loved, you matter, and you are not alone.",
-    "My bebi, I'm proud of the person you are becoming, and I love the person you are right now.",
-    "One tiny virtual kiss delivered across the distance. Please accept it immediately. ♡"
-  ];
-
-  window.cozyLovelyNotes = notePool;
-
-  function setTopMessage(text){
-    const el=document.getElementById("game-top-message-text");
-    if(el) el.textContent=text;
-  }
-
-  function showEndControls(){
-    const box=document.getElementById("end-game-controls");
-    if(box) box.hidden=false;
-  }
-  function hideEndControls(){
-    const box=document.getElementById("end-game-controls");
-    if(box) box.hidden=true;
-  }
-
-  window.cozyGameFinished=function(message){
-    setTopMessage(message || "Meri jaan, you did it. I'm proud of you. ♡");
-    showEndControls();
-  };
-
-  document.addEventListener("DOMContentLoaded", function(){
-    const refresh=document.getElementById("end-refresh-btn");
-    const arcade=document.getElementById("end-arcade-btn");
-
-    refresh && refresh.addEventListener("click", function(){
-      hideEndControls();
-      location.reload();
-    });
-
-    arcade && arcade.addEventListener("click", function(){
-      hideEndControls();
-      const arcadeTarget =
-        document.querySelector("#arcade") ||
-        document.querySelector(".arcade") ||
-        document.querySelector("[data-screen='arcade']") ||
-        document.querySelector("[data-page='arcade']");
-      if(arcadeTarget){
-        document.querySelectorAll("section, .screen, .page, .game").forEach(x=>x.classList.remove("active"));
-        arcadeTarget.classList.add("active");
-        arcadeTarget.scrollIntoView({behavior:"smooth",block:"start"});
-      }else{
-        // Fall back to the existing arcade navigation if the page has one.
-        const back = Array.from(document.querySelectorAll("button,a")).find(x =>
-          /arcade/i.test((x.textContent||"").trim())
-        );
-        if(back) back.click();
-        else window.scrollTo({top:0,behavior:"smooth"});
-      }
-      setTopMessage("Meri jaan, choose whatever you want to play next. No pressure, just fun. ♡");
-    });
-
-    // Let the jar use the expanded note pool if the existing code looks for a global list.
-    window.lovelyNotes = notePool;
-    window.jarNotes = notePool;
-
-    // Make the ending Bubble Drift message contain the requested phrase.
-    const all = document.querySelectorAll("p,div,span,h1,h2,h3,button");
-    all.forEach(el=>{
-      const t=(el.textContent||"").trim();
-      if(/bubble drift/i.test(t) && /complete|finish|end|done/i.test(t)){
-        const parent=el.parentElement;
-        if(parent && !parent.dataset.cozyBubbleEnding){
-          parent.dataset.cozyBubbleEnding="1";
-          const m=document.createElement("div");
-          m.className="bubble-ending-message";
-          m.style.cssText="margin-top:12px;line-height:1.5;";
-          m.textContent="Meri jaan, you made it through, like you did with these bubbles one by one. ♡";
-          parent.appendChild(m);
-        }
-      }
-    });
-  });
-
-  // Expose a helper for any existing game's completion code.
-  window.finishCozyGame=window.cozyGameFinished;
-})();
 </script>
 
 </body>
