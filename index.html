@@ -57,6 +57,21 @@
     outline: 3px solid var(--lavender);
   }
 
+  /* Prevent Android/Brave long-press text-selection overlays on the game UI.
+     The arcade is interactive, so tapping/holding cards should never select
+     the page and show the browser's Copy/Share toolbar. Textareas remain usable. */
+  body, .screen, .card, .card-grid, button, .mascot-wrap,
+  .progress-row, .progress-dot, .game-top-message {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
   /* ---------- Ambient glow drifters (soft, dim, no flashing) ---------- */
   .glow-layer {
     position: fixed;
@@ -163,7 +178,7 @@
     color: var(--text);
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity .4s ease, transform .4s ease;
+    transition: opacity 1s ease, transform 1s ease;
     pointer-events: none;
   }
   .mascot-bubble.show { opacity: 1; transform: translateY(0); }
@@ -173,14 +188,6 @@
   @keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-7px);} }
   .mascot-svg:hover { transform: scale(1.12); }
   .mascot-svg { transition: transform .2s ease; }
-  .moon-svg {
-    display: block;
-    margin: 0 auto 6px;
-    cursor: pointer;
-    transition: transform .2s ease;
-    filter: drop-shadow(0 0 7px rgba(231,222,233,.4));
-  }
-  .moon-svg:hover { transform: scale(1.15); }
 
   /* ---------- Hub ---------- */
   .hub-header { text-align: center; max-width: 580px; margin: 10px 0 30px; }
@@ -562,7 +569,6 @@
     .final-card .display { font-size: 21px; }
     .mascot-wrap { bottom: 12px; right: 12px; }
     .mascot-svg { width: 44px; height: 44px; }
-    .moon-svg { width: 24px; height: 24px; }
     .modal { padding: 26px 20px; }
     .cert-footer { flex-direction: column; align-items: center; text-align: center; }
     .cert-sign, .cert-date { text-align: center; min-width: 0; }
@@ -571,6 +577,18 @@
 </style>
 
 <style id="cozy-fixes">
+/* Mobile: never show the browser's blue text-selection rectangle/handles on the arcade UI. */
+html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
+.mascot-wrap, .mascot-bubble, .mascot-svg, .game-top-message,
+.play-btn, .end-game-controls, .end-game-btn {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+.card, .play-btn, .end-game-btn, .mascot-wrap {
+  touch-action: manipulation;
+}
 .game-top-message{
   width:min(760px,92vw);
   margin:18px auto 12px;
@@ -689,11 +707,7 @@
 <div class="glow-layer" id="glowLayer"></div>
 
 <div class="mascot-wrap" id="mascotWrap">
-  <div class="mascot-bubble" id="moonBubble"></div>
-  <svg class="moon-svg" id="moonIcon" width="30" height="30" viewBox="0 0 34 34" role="button" tabindex="0" aria-label="Tap the moon">
-    <path d="M21 3 A14 14 0 1 0 21 31 A10.5 10.5 0 1 1 21 3 Z" fill="#E7DEE9" stroke="#B8A9C9" stroke-width="1"/>
-  </svg>
-  <div class="mascot-bubble" id="mascotBubble"></div>
+  <div class="mascot-bubble" id="mascotBubble" aria-live="polite"></div>
   <svg class="mascot-svg" width="54" height="54" viewBox="0 0 54 54">
     <polygon points="27,3 33,20 51,20 36,31 42,49 27,38 12,49 18,31 3,20 21,20"
       fill="#D9AE6E" stroke="#C79A54" stroke-width="1.5" stroke-linejoin="round"/>
@@ -707,7 +721,7 @@
 <div class="screen active" id="screen-hub">
   <div class="hub-header">
     <div class="eyebrow">a tiny arcade, built just for you</div>
-    <h1>Skip the reels for a while. Come play with me instead 🌙</h1>
+    <h1>Skip the reels for a while. Come play with me instead ⭐</h1>
     <p>Six cozy little games, no timers, no losing, nothing bright or flashy. Just little ways to remind you that you are loved.</p>
   </div>
 
@@ -935,6 +949,21 @@
 </div>
 
 <script>
+// Keep mobile taps/long-presses from turning the arcade UI into browser text selection.
+document.addEventListener('contextmenu', (e) => {
+  if (!e.target.closest('input, textarea, button')) e.preventDefault();
+});
+document.addEventListener('selectstart', (e) => {
+  if (!e.target.closest('input, textarea')) e.preventDefault();
+});
+document.addEventListener('dragstart', (e) => {
+  if (!e.target.closest('input, textarea')) e.preventDefault();
+});
+document.addEventListener('pointerdown', (e) => {
+  if (e.pointerType === 'touch' && !e.target.closest('input, textarea')) {
+    window.getSelection()?.removeAllRanges();
+  }
+}, { passive: true });
 /* ============================================================
    ✏️ EASY PERSONALIZATION. Edit everything in this block
    before you publish, it will make this ten times sweeter.
@@ -1101,7 +1130,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 });
 
 const mascotLines = [
-  "you've got this 🌙",
+  "you've got this ⭐",
   "take your time, no rush",
   "I'm rooting for you",
   "almost there!",
@@ -1116,22 +1145,10 @@ function showMascotLine(){
   const bubble = document.getElementById('mascotBubble');
   bubble.textContent = pickRandom(mascotLines);
   bubble.classList.add('show');
-  setTimeout(()=> bubble.classList.remove('show'), 3400);
+  setTimeout(()=> bubble.classList.remove('show'), 3000);
 }
 setTimeout(showMascotLine, 1500);
 document.getElementById('mascotWrap').addEventListener('click', showMascotLine);
-
-/* ---------- The moon (her), and the star (me) adoring her ---------- */
-function showMoonLine(e){
-  if(e) e.stopPropagation();
-  const bubble = document.getElementById('moonBubble');
-  bubble.textContent = "This is how I look at you, meri jaan... adoring you. 🌙";
-  bubble.classList.add('show');
-  setTimeout(()=> bubble.classList.remove('show'), 3800);
-}
-const moonIcon = document.getElementById('moonIcon');
-moonIcon.addEventListener('click', showMoonLine);
-moonIcon.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showMoonLine(e); } });
 
 /* ---------- Ambient glow drifters ---------- */
 (function makeGlows(){
