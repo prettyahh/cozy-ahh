@@ -280,6 +280,67 @@
   .final-note-btn.show { display: inline-block; }
   .final-note-btn:hover { background: var(--lavender-deep); transform: translateY(-2px); }
 
+  /* ---------- Persistent reviews on the arcade hub ---------- */
+  .hub-review-area{
+    width:min(820px,100%);
+    margin-top:24px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+  }
+  .hub-review-btn{
+    background:var(--lavender);
+    color:#1E1A2E;
+    padding:12px 24px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:15px;
+    box-shadow:var(--shadow);
+    transition:background .2s ease,transform .2s ease;
+  }
+  .hub-review-btn:hover{background:var(--lavender-deep);transform:translateY(-2px);}
+  .hub-review-count{
+    display:inline-flex;
+    min-width:24px;
+    height:24px;
+    align-items:center;
+    justify-content:center;
+    margin-left:5px;
+    padding:0 7px;
+    border-radius:999px;
+    background:rgba(255,255,255,.28);
+    font-size:12px;
+  }
+  .hub-review-box{
+    width:min(620px,100%);
+    background:var(--panel);
+    border:1px solid rgba(231,222,233,.12);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    display:none;
+    text-align:left;
+  }
+  .hub-review-box.show{display:block;}
+  .hub-review-box-title{
+    font-family:'Quicksand',sans-serif;
+    font-weight:700;
+    text-align:center;
+    margin-bottom:12px;
+    color:var(--gold);
+  }
+  .hub-review-item{
+    background:var(--panel-soft);
+    border-radius:15px;
+    padding:13px 14px;
+    margin-top:10px;
+  }
+  .hub-review-rating{color:var(--gold);letter-spacing:2px;font-size:16px;}
+  .hub-review-note{margin-top:7px;line-height:1.5;color:var(--text);font-size:14px;white-space:pre-wrap;word-break:break-word;}
+  .hub-review-date{margin-top:7px;color:var(--text-soft);font-size:11px;}
+  .hub-review-empty{text-align:center;color:var(--text-soft);font-size:13px;padding:5px;}
+
   /* ---------- Game shells ---------- */
   .game-title { font-size: 23px; text-align: center; margin-bottom: 4px; }
   .game-sub { color: var(--text-soft); font-size: 14px; text-align: center; margin-bottom: 20px; max-width: 420px; line-height: 1.5; }
@@ -782,6 +843,16 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
     </div>
   </div>
 
+  <div class="hub-review-area" id="hubReviewArea">
+    <button class="hub-review-btn" id="hubReviewBtn" onclick="openScreen('reviews')">
+      💌 Reviews <span class="hub-review-count" id="hubReviewCount">0</span>
+    </button>
+    <div class="hub-review-box" id="hubReviewBox">
+      <div class="hub-review-box-title">Little reviews left here ♡</div>
+      <div id="hubReviewsList"></div>
+    </div>
+  </div>
+
   <button class="final-note-btn" id="finalBtn" onclick="openScreen('final')">Open your note 💌</button>
 </div>
 
@@ -928,6 +999,16 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
   <div class="cert-actions">
     <button class="cert-btn" id="downloadCertBtn">⬇ Download certificate</button>
     <button class="cert-btn secondary" onclick="openScreen('review')">Leave me a little review 💌</button>
+  </div>
+</div>
+
+<!-- REVIEWS VIEWER SCREEN (read-only) -->
+<div class="screen" id="screen-reviews">
+  <div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div>
+  <h2 class="game-title">Reviews 💌</h2>
+  <p class="game-sub">Little notes that have already been left here ♡</p>
+  <div class="review-card hub-review-box show" id="reviewsViewerBox">
+    <div id="reviewsViewerList"></div>
   </div>
 </div>
 
@@ -1235,6 +1316,9 @@ function openScreen(name){
   if(name==='flower' && !flowerStarted) startFlower();
   if(name==='quiz' && !quizStarted) startQuiz();
   if(name==='jar' && !jarStarted) startJar();
+  if(name==='review' && window.renderHubReviews) window.renderHubReviews();
+  if(name==='reviews' && window.renderReviewsViewer) window.renderReviewsViewer();
+  if(name==='hub' && window.renderHubReviews) window.renderHubReviews();
   if(name==='final') floatHearts(14);
 }
 
@@ -1703,25 +1787,98 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
   const submitBtn = document.getElementById('reviewSubmitBtn');
   const thanks = document.getElementById('reviewThanks');
   if(!starsWrap) return;
+
   const stars = [...starsWrap.querySelectorAll('.review-star')];
   let rating = 0;
 
-  function paintStars(){
-    stars.forEach(s=> s.classList.toggle('filled', Number(s.dataset.value) <= rating));
+  function getReviews(){
+    try{
+      const saved = JSON.parse(localStorage.getItem('cozyArcadeReviews') || '[]');
+      if(Array.isArray(saved)) return saved;
+    }catch(e){}
+    return [];
   }
 
-  try {
-    const saved = JSON.parse(localStorage.getItem('cozyArcadeReview') || 'null');
-    if(saved){
-      rating = saved.rating || 0;
-      if(saved.note) noteBox.value = saved.note;
-      paintStars();
-      if(saved.rating){
-        thanks.textContent = 'Got it, saved right here for me to find later. Thank you, meri jaan. 💗';
-        thanks.classList.add('show');
-      }
+  function saveReviews(reviews){
+    try{ localStorage.setItem('cozyArcadeReviews', JSON.stringify(reviews)); }catch(e){}
+  }
+
+  function paintStars(){
+    stars.forEach(s => s.classList.toggle('filled', Number(s.dataset.value) <= rating));
+  }
+
+  function renderHubReviews(){
+    const list = document.getElementById('hubReviewsList');
+    const count = document.getElementById('hubReviewCount');
+    const box = document.getElementById('hubReviewBox');
+    if(!list || !count || !box) return;
+
+    const reviews = getReviews();
+    count.textContent = reviews.length;
+
+    if(!reviews.length){
+      list.innerHTML = '<div class="hub-review-empty">No reviews yet. Be the first one to leave a little note. ♡</div>';
+      box.classList.remove('show');
+      return;
     }
-  } catch(e){}
+
+    box.classList.add('show');
+    list.innerHTML = reviews.slice().reverse().map((review, index) => {
+      const safeRating = Math.max(0, Math.min(5, Number(review.rating) || 0));
+      const starsText = '★'.repeat(safeRating) + '☆'.repeat(5-safeRating);
+      const dateText = review.savedAt ? new Date(review.savedAt).toLocaleString() : '';
+      const note = review.note ? review.note : 'No written note — just a star rating. ♡';
+      return `
+        <div class="hub-review-item">
+          <div class="hub-review-rating">${starsText}</div>
+          <div class="hub-review-note"></div>
+          ${dateText ? `<div class="hub-review-date">${dateText}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    // Insert notes as text rather than HTML so review content cannot inject markup.
+    const items = [...list.querySelectorAll('.hub-review-item')];
+    reviews.slice().reverse().forEach((review, i) => {
+      const noteEl = items[i]?.querySelector('.hub-review-note');
+      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
+    });
+  }
+
+  function renderReviewsViewer(){
+    const list = document.getElementById('reviewsViewerList');
+    if(!list) return;
+    const reviews = getReviews();
+    if(!reviews.length){
+      list.innerHTML = '<div class="hub-review-empty">No reviews yet. ♡</div>';
+      return;
+    }
+    list.innerHTML = reviews.slice().reverse().map(review => {
+      const safeRating = Math.max(0, Math.min(5, Number(review.rating) || 0));
+      const starsText = '★'.repeat(safeRating) + '☆'.repeat(5-safeRating);
+      const dateText = review.savedAt ? new Date(review.savedAt).toLocaleString() : '';
+      return `
+        <div class="hub-review-item">
+          <div class="hub-review-rating">${starsText}</div>
+          <div class="hub-review-note"></div>
+          ${dateText ? `<div class="hub-review-date">${dateText}</div>` : ''}
+        </div>`;
+    }).join('');
+    const items = [...list.querySelectorAll('.hub-review-item')];
+    reviews.slice().reverse().forEach((review, i) => {
+      const noteEl = items[i]?.querySelector('.hub-review-note');
+      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
+    });
+  }
+
+  // Migrate the old single-review format if it exists.
+  try{
+    const old = JSON.parse(localStorage.getItem('cozyArcadeReview') || 'null');
+    const current = getReviews();
+    if(old && (old.rating || old.note) && !current.length){
+      saveReviews([old]);
+    }
+  }catch(e){}
 
   stars.forEach(star=>{
     star.addEventListener('click', ()=>{
@@ -1730,24 +1887,42 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
     });
     star.addEventListener('mouseenter', ()=>{
       const hoverVal = Number(star.dataset.value);
-      stars.forEach(s=> s.classList.toggle('filled', Number(s.dataset.value) <= hoverVal));
+      stars.forEach(s => s.classList.toggle('filled', Number(s.dataset.value) <= hoverVal));
     });
   });
   starsWrap.addEventListener('mouseleave', paintStars);
 
   submitBtn.addEventListener('click', ()=>{
     const note = noteBox.value.trim();
-    try {
-      localStorage.setItem('cozyArcadeReview', JSON.stringify({ rating, note, savedAt: Date.now() }));
-    } catch(e){}
-    thanks.textContent = rating
-      ? 'Thank you, meri jaan. Saved right here for me to find later. 💗'
-      : 'Saved your note, meri jaan. 💗';
+
+    if(!rating && !note){
+      thanks.textContent = 'Pick a star or leave a little note first, meri jaan. 💗';
+      thanks.classList.add('show');
+      return;
+    }
+
+    const reviews = getReviews();
+    reviews.push({ rating, note, savedAt: Date.now() });
+    saveReviews(reviews);
+
+    thanks.textContent = 'Thank you, meri jaan. Your review is saved and added to the arcade. 💗';
     thanks.classList.add('show');
+
+    // Clear the form so another review can be submitted as a separate entry.
+    rating = 0;
+    noteBox.value = '';
+    paintStars();
+
+    renderHubReviews();
     sparkleBurst();
   });
+
+  renderHubReviews();
+  window.renderHubReviews = renderHubReviews;
+  window.renderReviewsViewer = renderReviewsViewer;
 })();
 
+/* Keep the hub review list/count fresh whenever the hub is opened. */
 </script>
 
 </body>
