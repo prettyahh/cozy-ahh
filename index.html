@@ -173,6 +173,14 @@
   @keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-7px);} }
   .mascot-svg:hover { transform: scale(1.12); }
   .mascot-svg { transition: transform .2s ease; }
+  .moon-svg {
+    display: block;
+    margin: 0 auto 6px;
+    cursor: pointer;
+    transition: transform .2s ease;
+    filter: drop-shadow(0 0 7px rgba(231,222,233,.4));
+  }
+  .moon-svg:hover { transform: scale(1.15); }
 
   /* ---------- Hub ---------- */
   .hub-header { text-align: center; max-width: 580px; margin: 10px 0 30px; }
@@ -385,7 +393,6 @@
 
   /* ---- Jar of Lovely Notes ---- */
   .jar-game { display:flex; flex-direction:column; align-items:center; gap:18px; width:100%; }
-  .jar-count { color:var(--text-soft); font-size:13px; min-height:20px; text-align:center; }
   .jar-scene { position:relative; width:280px; height:330px; display:flex; align-items:flex-end; justify-content:center; }
   .jar-glow { position:absolute; width:210px; height:210px; border-radius:50%; background:radial-gradient(circle, rgba(217,174,110,.16), transparent 68%); top:48px; }
   .jar { position:relative; width:170px; height:210px; border:4px solid rgba(231,222,233,.72); border-top:none; border-radius:24px 24px 38px 38px; background:linear-gradient(180deg,rgba(156,141,199,.13),rgba(217,152,172,.13)); box-shadow:inset 0 0 22px rgba(255,255,255,.06),0 16px 30px rgba(15,10,25,.35); cursor:pointer; transition:transform .18s ease; z-index:2; }
@@ -398,7 +405,6 @@
   .jar-label { position:absolute; left:50%; top:84px; transform:translateX(-50%); width:112px; padding:9px 7px; text-align:center; border-radius:10px; background:rgba(59,49,82,.86); border:1px solid rgba(231,222,233,.2); font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; color:var(--text); z-index:3; }
   .lovely-note { width:min(430px,92vw); min-height:120px; padding:22px 22px 20px; background:var(--panel); border:1px solid rgba(231,222,233,.12); border-radius:20px; box-shadow:var(--shadow); text-align:center; display:flex; flex-direction:column; justify-content:center; gap:8px; opacity:0; transform:translateY(10px) scale(.98); transition:opacity .3s ease,transform .3s ease; }
   .lovely-note.show { opacity:1; transform:translateY(0) scale(1); }
-  .note-kind { color:var(--gold); font-size:12px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; }
   .note-text { font-family:'Quicksand',sans-serif; font-weight:700; font-size:18px; line-height:1.55; }
   .jar-hint { color:var(--text-soft); font-size:13px; text-align:center; }
 
@@ -484,6 +490,84 @@
   .final-card .display { font-size: 25px; margin-bottom: 20px; }
   .final-card p { font-size: 16px; line-height: 1.8; color: var(--text); text-align: left; margin-bottom: 16px; }
   .final-card .sign-off { margin-top: 22px; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--rose); font-size: 17px; text-align: center; }
+  .final-next-btn { margin-top: 26px; background: var(--gold); color: #2A1D24; padding: 12px 26px; border-radius: 999px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow); transition: background .2s ease, transform .2s ease; }
+  .final-next-btn:hover { background: var(--gold-deep); transform: translateY(-2px); }
+
+  /* ---------- Certificate ---------- */
+  .cert-card {
+    background: linear-gradient(180deg, #F4ECD8, #EADFC3);
+    color: #4A3A22;
+    border-radius: 18px;
+    padding: 36px 28px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 3px solid var(--gold);
+    position: relative;
+  }
+  .cert-card::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1.5px dashed var(--gold-deep);
+    border-radius: 12px;
+    pointer-events: none;
+  }
+  .cert-seal { font-size: 40px; margin-bottom: 6px; display: block; }
+  .cert-title { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 22px; color: #4A3A22; margin-bottom: 4px; }
+  .cert-sub { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: #8A6E3C; margin-bottom: 22px; }
+  .cert-row { margin-bottom: 16px; }
+  .cert-label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #8A6E3C; font-weight: 700; margin-bottom: 4px; }
+  .cert-value { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 19px; color: #4A3A22; line-height: 1.4; }
+  .cert-footer { margin-top: 26px; display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+  .cert-sign { text-align: left; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 14px; color: #4A3A22; border-top: 1.5px solid #8A6E3C; padding-top: 4px; min-width: 150px; }
+  .cert-date { text-align: right; font-size: 12px; color: #8A6E3C; border-top: 1.5px solid #8A6E3C; padding-top: 4px; min-width: 110px; }
+  .cert-actions { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cert-btn { background: var(--rose); color: #2A1D24; padding: 12px 24px; border-radius: 999px; font-weight: 700; font-size: 14px; box-shadow: var(--shadow); transition: background .2s ease, transform .2s ease; }
+  .cert-btn:hover { background: var(--rose-deep); transform: translateY(-2px); }
+  .cert-btn.secondary { background: var(--lavender); color: #1E1A2E; }
+  .cert-btn.secondary:hover { background: var(--lavender-deep); }
+
+  /* ---------- Review page ---------- */
+  .review-card { background: var(--panel); border-radius: 24px; padding: 34px 26px; max-width: 460px; width: 100%; text-align: center; box-shadow: var(--shadow); }
+  .review-stars { display: flex; justify-content: center; gap: 8px; margin: 18px 0 22px; }
+  .review-star { font-size: 34px; line-height: 1; cursor: pointer; background: none; color: var(--panel-softer); transition: transform .15s ease, color .2s ease; }
+  .review-star:hover { transform: scale(1.15); }
+  .review-star.filled { color: var(--gold); }
+  .review-textarea { width: 100%; min-height: 120px; resize: vertical; border-radius: 16px; border: 1px solid rgba(231,222,233,.2); background: var(--panel-soft); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 15px; padding: 14px; margin-bottom: 18px; }
+  .review-textarea::placeholder { color: var(--text-soft); }
+  .review-submit { background: var(--sage); color: #17241F; padding: 12px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow); transition: background .2s ease, transform .2s ease; }
+  .review-submit:hover { background: var(--sage-deep); transform: translateY(-2px); }
+  .review-thanks { display: none; margin-top: 18px; color: var(--rose); font-weight: 700; font-size: 15px; line-height: 1.6; }
+  .review-thanks.show { display: block; }
+
+  /* ---------- Mobile refinements ---------- */
+  @media (max-width: 480px) {
+    .screen { padding: 24px 14px 48px; }
+    .hub-header h1 { font-size: 25px; }
+    .hub-header p { font-size: 14.5px; }
+    .game-title { font-size: 20px; }
+    .game-sub { font-size: 13px; }
+    .card { padding: 20px 14px; }
+    .card .icon { font-size: 32px; }
+    .bubble-field, .star-field { height: 340px; }
+    .jar-scene { width: 230px; height: 280px; }
+    .jar { width: 145px; height: 180px; }
+    .jar-neck { left: 14px; right: 14px; }
+    .flower-wrap { width: min(270px, 88vw); height: 270px; }
+    .quiz-card { padding: 22px 18px; }
+    .quiz-question { font-size: 16px; }
+    .final-card, .cert-card, .review-card { padding: 28px 18px; }
+    .final-card .display { font-size: 21px; }
+    .mascot-wrap { bottom: 12px; right: 12px; }
+    .mascot-svg { width: 44px; height: 44px; }
+    .moon-svg { width: 24px; height: 24px; }
+    .modal { padding: 26px 20px; }
+    .cert-footer { flex-direction: column; align-items: center; text-align: center; }
+    .cert-sign, .cert-date { text-align: center; min-width: 0; }
+    .review-star { font-size: 30px; }
+  }
 </style>
 
 <style id="cozy-fixes">
@@ -528,10 +612,7 @@
 }
 .end-game-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.14);}
 .end-game-btn.secondary{background:rgba(255,255,255,.72);}
-#flower-game svg{overflow:visible;}
-#flower-game .petal{transform-box:fill-box;transform-origin:center;cursor:pointer;transition:transform .22s ease,opacity .22s ease;}
-#flower-game .petal:hover{transform:scale(1.05);}
-#flower-game .petal.plucked{opacity:0;transform:translate(var(--fall-x,0px),var(--fall-y,85px)) rotate(var(--fall-r,30deg));pointer-events:none;}
+
 </style>
 </head>
 <body>
@@ -539,6 +620,10 @@
 <div class="glow-layer" id="glowLayer"></div>
 
 <div class="mascot-wrap" id="mascotWrap">
+  <div class="mascot-bubble" id="moonBubble"></div>
+  <svg class="moon-svg" id="moonIcon" width="30" height="30" viewBox="0 0 34 34" role="button" tabindex="0" aria-label="Tap the moon">
+    <path d="M21 3 A14 14 0 1 0 21 31 A10.5 10.5 0 1 1 21 3 Z" fill="#E7DEE9" stroke="#B8A9C9" stroke-width="1"/>
+  </svg>
   <div class="mascot-bubble" id="mascotBubble"></div>
   <svg class="mascot-svg" width="54" height="54" viewBox="0 0 54 54">
     <polygon points="27,3 33,20 51,20 36,31 42,49 27,38 12,49 18,31 3,20 21,20"
@@ -578,14 +663,14 @@
       <div class="check-badge" id="badge-bubble">✓</div>
       <span class="icon">🫧</span>
       <h3>Bubble Drift</h3>
-      <p>Pop 22 slow, floaty bubbles. No rush at all.</p>
+      <p>Pop 26 slow, floaty bubbles. No rush at all.</p>
       <div class="play-btn">Play</div>
     </div>
     <div class="card" tabindex="0" role="button" onclick="openScreen('star')">
       <div class="check-badge" id="badge-star">✓</div>
       <span class="icon">⭐</span>
       <h3>Starcatcher</h3>
-      <p>Move the little basket and catch 16 falling stars.</p>
+      <p>Move the little basket and catch 20 falling stars.</p>
       <div class="play-btn">Play</div>
     </div>
     <div class="card" tabindex="0" role="button" onclick="openScreen('flower')">
@@ -628,7 +713,7 @@
   <div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div>
   <h2 class="game-title">Bubble Drift</h2>
   <p class="game-sub">Tap the bubbles as they float by, slow and easy</p>
-  <div class="goal-track">Popped: <span id="bubbleScore">0</span> / 22</div>
+  <div class="goal-track">Popped: <span id="bubbleScore">0</span> / 26</div>
   <div class="bubble-field" id="bubbleField"></div>
 </div>
 
@@ -637,7 +722,7 @@
   <div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div>
   <h2 class="game-title">Starcatcher</h2>
   <p class="game-sub">Move your mouse (or finger) left and right to catch stars</p>
-  <div class="goal-track">Caught: <span id="starScore">0</span> / 16</div>
+  <div class="goal-track">Caught: <span id="starScore">0</span> / 20</div>
   <div class="star-field" id="starField">
     <div class="basket" id="basket" style="left:50%;">🧺</div>
   </div>
@@ -657,7 +742,6 @@
   <h2 class="game-title">Jar of Lovely Notes</h2>
   <p class="game-sub">Tap the jar whenever you need a little reminder from me. There is no bad day here, only another note waiting for you.</p>
   <div class="jar-game">
-    <div class="jar-count" id="jarCount">Notes opened: 0 / 8</div>
     <div class="jar-scene">
       <div class="jar-glow"></div>
       <div class="jar" id="lovelyJar" role="button" tabindex="0" aria-label="Tap the jar for a lovely note">
@@ -667,7 +751,6 @@
       </div>
     </div>
     <div class="lovely-note" id="lovelyNote" aria-live="polite">
-      <div class="note-kind" id="noteKind">a note for you</div>
       <div class="note-text" id="noteText">Tap the jar, meri jaan. I put something in there for you. 💌</div>
     </div>
     <div class="jar-hint">Tap the jar again whenever you want another one.</div>
@@ -689,6 +772,56 @@
     <div class="display">You found all my little reminders ✨</div>
     <div id="finalMessage"></div>
     <div class="sign-off" id="finalSignOff"></div>
+    <button class="final-next-btn" onclick="openScreen('certificate')">Claim your certificate 🎓</button>
+  </div>
+</div>
+
+<!-- CERTIFICATE SCREEN -->
+<div class="screen" id="screen-certificate">
+  <div class="top-bar"><button class="back-btn" onclick="openScreen('final')">← back</button></div>
+  <div class="cert-card" id="certCard">
+    <span class="cert-seal">🏅</span>
+    <div class="cert-title">Certificate of Being Loved</div>
+    <div class="cert-sub">awarded with full honors</div>
+    <div class="cert-row">
+      <div class="cert-label">Name</div>
+      <div class="cert-value" id="certName">meri jaan</div>
+    </div>
+    <div class="cert-row">
+      <div class="cert-label">Age</div>
+      <div class="cert-value" id="certAge">18</div>
+    </div>
+    <div class="cert-row">
+      <div class="cert-label">Qualification</div>
+      <div class="cert-value" id="certQualification">best gf ever deserves all the love and is always loved by me</div>
+    </div>
+    <div class="cert-footer">
+      <div class="cert-sign" id="certSign">Always yours, me</div>
+      <div class="cert-date" id="certDate"></div>
+    </div>
+  </div>
+  <div class="cert-actions">
+    <button class="cert-btn" id="downloadCertBtn">⬇ Download certificate</button>
+    <button class="cert-btn secondary" onclick="openScreen('review')">Leave me a little review 💌</button>
+  </div>
+</div>
+
+<!-- REVIEW SCREEN -->
+<div class="screen" id="screen-review">
+  <div class="top-bar"><button class="back-btn" onclick="openScreen('certificate')">← back</button></div>
+  <h2 class="game-title">Rate Your Boyfriend 😌</h2>
+  <p class="game-sub">Out of 5 stars, and leave a little note for me if you want.</p>
+  <div class="review-card">
+    <div class="review-stars" id="reviewStars">
+      <button class="review-star" data-value="1">★</button>
+      <button class="review-star" data-value="2">★</button>
+      <button class="review-star" data-value="3">★</button>
+      <button class="review-star" data-value="4">★</button>
+      <button class="review-star" data-value="5">★</button>
+    </div>
+    <textarea class="review-textarea" id="reviewNote" placeholder="Leave a little note for me, meri jaan..."></textarea>
+    <button class="review-submit" id="reviewSubmitBtn">Send it to me 💌</button>
+    <div class="review-thanks" id="reviewThanks"></div>
   </div>
 </div>
 
@@ -728,7 +861,7 @@ const messagesByGame = {
     "Whatever is going on is not a measure of your worth. I hope you remember that when your brain gets mean."
   ],
   star: [
-    "You caught 16 stars. I'd hand you the real ones if distance wasn't being annoying again. ✨",
+    "You caught 20 stars. I'd hand you the real ones if distance wasn't being annoying again. ✨",
     "Meri jaan, you are still my favorite person on the planet, even from very, very far away.",
     "Every star is a tiny reminder: I am thinking of you on my side of this LDR too.",
     "My bebi, you don't have to be strong every second. You can be soft with me.",
@@ -755,17 +888,23 @@ const messagesByGame = {
   ],
   jar: [
     "The jar says: meri jaan, you are loved from one side of this distance to the other. No fine print. 💗",
-    "My bebi, tiny silly reminder: I would absolutely still choose you after hearing the same story 47 times.",
-    "Confidence note: look at you. You made it through another day. That is not nothing, meri jaan.",
-    "Funny note: if hugs could travel by Wi-Fi, your internet would be permanently overloaded because I sent you 900.",
-    "Silly note: official LDR law says I am allowed to steal exactly one forehead kiss when we meet. Maybe twelve.",
-    "Soft note: whatever is happening right now does not make you difficult, broken, or a burden. You are still you, and I still adore you.",
-    "Reminder: not everything that goes wrong is yours to fix. You do not have to blame yourself for things outside your control.",
+    "My bebi, tiny reminder: I would absolutely still choose you after hearing the same story 47 times.",
+    "Look at you. You made it through another day. That is not nothing, meri jaan.",
+    "If hugs could travel by Wi-Fi, your internet would be permanently overloaded because I sent you 900.",
+    "Official LDR law says I am allowed to steal exactly one forehead kiss when we meet. Maybe twelve.",
+    "Whatever is happening right now does not make you difficult, broken, or a burden. You are still you, and I still adore you.",
+    "Not everything that goes wrong is yours to fix. You do not have to blame yourself for things outside your control.",
     "Meri jaan, you never have to prove that you deserve love. You already do. On good days, bad days, quiet days, all of them.",
     "My bebi, if today feels heavy, let me carry a little of it with you. You do not have to carry everything alone.",
-    "Confident girl reminder: you are capable, lovable, funny, beautiful, and allowed to ask for reassurance when you need it.",
+    "You are capable, lovable, funny, beautiful, and allowed to ask for reassurance when you need it.",
     "A tiny truth from your boyfriend: distance has made me appreciate every little thing about you approximately 9000% more.",
-    "Emergency silly note: I have consulted three experts and all three agree you need a hug, a snack, and me being annoying beside you."
+    "I have consulted three experts and all three agree you need a hug, a snack, and me being annoying beside you.",
+    "Meri jaan, if today feels heavy, you don't have to carry it perfectly. I'm still right here. ♡",
+    "You are so much more than one bad day, one mistake, or one difficult moment.",
+    "If I could teleport right now, I'd be beside you stealing one hug and refusing to let go.",
+    "Meri jaan, you don't have to earn my love. You already have it. Completely.",
+    "Being tired doesn't make you weak. Needing comfort doesn't make you a burden.",
+    "Whatever is going on around you, please don't automatically make it your fault. You deserve gentleness too."
   ]
 };
 
@@ -820,6 +959,24 @@ const QUIZ_QUESTIONS = [
     reply: "Correct, meri jaan. I want my love to feel like a little safe place you can come back to."
   },
   {
+    q: "When you finally get to rest, what are you allowed to feel?",
+    options: ["Guilty for stopping", "Like you should be doing more", "Nothing at all", "Relief, without needing to justify it"],
+    correct: 3,
+    reply: "Yes, meri jaan. Rest doesn't need a permission slip. You are allowed to just breathe."
+  },
+  {
+    q: "If you send me a text and I take a while to reply, what does that mean?",
+    options: ["I am upset with you", "I forgot about you", "Life happened, not love disappearing", "You did something wrong"],
+    correct: 2,
+    reply: "Correct, my bebi. A slow reply is never a smaller heart. I am always coming back to you."
+  },
+  {
+    q: "What's the one thing that stays exactly the same, no matter how far apart we are?",
+    options: ["How much I love you", "My schedule", "The time zones", "Nothing stays the same"],
+    correct: 0,
+    reply: "Exactly, meri jaan. Miles can mess with a lot of things. My love for you isn't one of them."
+  },
+  {
     q: "Final question: if today is difficult, what do you owe yourself?",
     options: ["Punishment", "More pressure", "A perfect explanation", "Patience, rest, and a reminder that you are still worthy"],
     correct: 3,
@@ -859,6 +1016,18 @@ function showMascotLine(){
 }
 setTimeout(showMascotLine, 1500);
 document.getElementById('mascotWrap').addEventListener('click', showMascotLine);
+
+/* ---------- The moon (her), and the star (me) adoring her ---------- */
+function showMoonLine(e){
+  if(e) e.stopPropagation();
+  const bubble = document.getElementById('moonBubble');
+  bubble.textContent = "This is how I look at you, meri jaan... adoring you. 🌙";
+  bubble.classList.add('show');
+  setTimeout(()=> bubble.classList.remove('show'), 3800);
+}
+const moonIcon = document.getElementById('moonIcon');
+moonIcon.addEventListener('click', showMoonLine);
+moonIcon.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showMoonLine(e); } });
 
 /* ---------- Ambient glow drifters ---------- */
 (function makeGlows(){
@@ -997,7 +1166,7 @@ function startMemory(){
 let bubbleStarted = false;
 let bubbleScoreVal = 0;
 let bubbleInterval = null;
-const BUBBLE_TARGET = 22;
+const BUBBLE_TARGET = 26;
 function startBubble(){
   bubbleStarted = true;
   bubbleScoreVal = 0;
@@ -1042,7 +1211,7 @@ function startBubble(){
 let starStarted = false;
 let starScoreVal = 0;
 let starInterval = null;
-const STAR_TARGET = 16;
+const STAR_TARGET = 20;
 function startStar(){
   starStarted = true;
   starScoreVal = 0;
@@ -1126,7 +1295,7 @@ function buildFlowerRound(firstTime){
   const group = document.getElementById('petalGroup');
   const label = document.getElementById('phraseLabel');
   const petalCount = 12;
-  const cx=165, cy=151, rx=47, ry=76;
+  const cx=165, cy=151, petalLen=78, petalWidth=19;
   let plucked=0;
   let done=false;
   const petalColors=['#D998AC','#E2A5B7','#C77E95','#DFA6C0'];
@@ -1134,20 +1303,26 @@ function buildFlowerRound(firstTime){
   for(let i=0;i<petalCount;i++){
     const angle=(360/petalCount)*i;
     const rad=angle*Math.PI/180;
-    const x=cx + rx*Math.sin(rad);
-    const y=cy - ry*Math.cos(rad);
-    const petal=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    // direction pointing outward from the flower's center
+    const dirX=Math.sin(rad), dirY=-Math.cos(rad);
+    // perpendicular direction, used to give the petal its width
+    const perpX=Math.cos(rad), perpY=Math.sin(rad);
+    const tipX=cx+dirX*petalLen, tipY=cy+dirY*petalLen;
+    const bulgeX=cx+dirX*petalLen*0.42, bulgeY=cy+dirY*petalLen*0.42;
+    const c1x=bulgeX+perpX*petalWidth, c1y=bulgeY+perpY*petalWidth;
+    const c2x=bulgeX-perpX*petalWidth, c2y=bulgeY-perpY*petalWidth;
+    // every petal starts and ends at (cx,cy), so they all meet cleanly at
+    // the flower's center instead of floating around loose
+    const d=`M ${cx} ${cy} Q ${c1x} ${c1y} ${tipX} ${tipY} Q ${c2x} ${c2y} ${cx} ${cy} Z`;
+    const petal=document.createElementNS('http://www.w3.org/2000/svg','path');
     petal.setAttribute('class','petal');
-    petal.setAttribute('cx',x);
-    petal.setAttribute('cy',y);
-    petal.setAttribute('rx','25');
-    petal.setAttribute('ry','49');
+    petal.setAttribute('d',d);
     petal.setAttribute('fill',petalColors[i%petalColors.length]);
     petal.setAttribute('stroke','#B86F87');
     petal.setAttribute('stroke-width','2');
-    petal.setAttribute('transform',`rotate(${angle} ${x} ${y})`);
-    petal.style.setProperty('--dx', `${Math.sin(rad)*55}px`);
-    petal.style.setProperty('--dy', `${Math.cos(rad)*55}px`);
+    petal.setAttribute('stroke-linejoin','round');
+    petal.style.setProperty('--dx', `${dirX*70}px`);
+    petal.style.setProperty('--dy', `${dirY*70}px`);
     petal.setAttribute('tabindex','0');
     petal.setAttribute('role','button');
     petal.setAttribute('aria-label','Pluck this petal');
@@ -1180,16 +1355,14 @@ function buildFlowerRound(firstTime){
 let jarStarted=false;
 let jarOpened=0;
 let jarNotes=[];
-const JAR_TARGET=8;
+const JAR_TARGET=18;
 function startJar(){
   jarStarted=true;
   jarOpened=0;
   jarNotes=[...messagesByGame.jar].sort(()=>Math.random()-0.5);
-  document.getElementById('jarCount').textContent='Notes opened: 0 / 8';
   const note=document.getElementById('lovelyNote');
   note.classList.remove('show');
   document.getElementById('noteText').textContent='Tap the jar, meri jaan. I put something in there for you. 💌';
-  document.getElementById('noteKind').textContent='a note for you';
   const jar=document.getElementById('lovelyJar');
   const open=()=>drawLovelyNote();
   jar.addEventListener('click',open);
@@ -1199,18 +1372,15 @@ function drawLovelyNote(){
   if(!jarNotes.length) jarNotes=[...messagesByGame.jar].sort(()=>Math.random()-0.5);
   const text=jarNotes.shift();
   jarOpened++;
-  const kinds=['cute','silly','funny','confidence boost','soft reminder','LDR note'];
-  document.getElementById('noteKind').textContent=pickRandom(kinds);
   const note=document.getElementById('lovelyNote');
   note.classList.remove('show');
   void note.offsetWidth;
   document.getElementById('noteText').textContent=text;
   note.classList.add('show');
-  document.getElementById('jarCount').textContent=`Notes opened: ${Math.min(jarOpened,JAR_TARGET)} / ${JAR_TARGET}`;
   sparkleBurst();
   if(jarOpened===JAR_TARGET){
     markComplete('jar');
-    setTimeout(()=>showModal('jar', 'Eight little notes, and I still have a whole jar full of reasons to adore you, my bebi. Keep tapping whenever you need one. 💗'),350);
+    setTimeout(()=>showModal('jar', 'I still have a whole jar full of reasons to adore you, my bebi. Keep tapping whenever you need one. 💗'),350);
   }
 }
 
@@ -1266,6 +1436,151 @@ function startQuiz(){
   }
   renderQuestion();
 }
+
+/* ============ CERTIFICATE ============ */
+(function initCertificate(){
+  const sign = document.getElementById('certSign');
+  const dateEl = document.getElementById('certDate');
+  if(sign) sign.textContent = `Always yours, ${YOUR_NAME}`;
+  if(dateEl){
+    const today = new Date();
+    dateEl.textContent = today.toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
+  }
+})();
+
+function downloadCertificate(){
+  const W = 1000, H = 700;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // background
+  const bg = ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,'#F4ECD8'); bg.addColorStop(1,'#EADFC3');
+  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+  // borders
+  ctx.strokeStyle = '#D9AE6E'; ctx.lineWidth = 10;
+  ctx.strokeRect(18,18,W-36,H-36);
+  ctx.setLineDash([6,7]);
+  ctx.strokeStyle = '#C79A54'; ctx.lineWidth = 2;
+  ctx.strokeRect(40,40,W-80,H-80);
+  ctx.setLineDash([]);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#4A3A22';
+
+  ctx.font = '48px sans-serif';
+  ctx.fillText('🏅', W/2, 130);
+
+  ctx.font = '700 40px Georgia, serif';
+  ctx.fillText('Certificate of Being Loved', W/2, 190);
+
+  ctx.font = '16px Georgia, serif';
+  ctx.fillStyle = '#8A6E3C';
+  ctx.fillText('AWARDED WITH FULL HONORS', W/2, 220);
+
+  function field(label, value, y, valueSize){
+    ctx.fillStyle = '#8A6E3C';
+    ctx.font = '13px Georgia, serif';
+    ctx.fillText(label.toUpperCase(), W/2, y);
+    ctx.fillStyle = '#4A3A22';
+    ctx.font = `700 ${valueSize}px Georgia, serif`;
+    wrapText(ctx, value, W/2, y+34, W-260, valueSize+8);
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+    const words = text.split(' ');
+    let line = '';
+    let lines = [];
+    for(let n=0;n<words.length;n++){
+      const testLine = line + words[n] + ' ';
+      if(ctx.measureText(testLine).width > maxWidth && n > 0){
+        lines.push(line);
+        line = words[n] + ' ';
+      } else {
+        line = testLine;
+      }
+    }
+    lines.push(line);
+    const startY = y - ((lines.length-1)*lineHeight)/2;
+    lines.forEach((l,i)=> ctx.fillText(l.trim(), x, startY + i*lineHeight));
+  }
+
+  field('Name', document.getElementById('certName').textContent, 280, 28);
+  field('Age', document.getElementById('certAge').textContent, 380, 28);
+  field('Qualification', document.getElementById('certQualification').textContent, 460, 24);
+
+  ctx.strokeStyle = '#8A6E3C'; ctx.lineWidth = 1.5;
+  ctx.textAlign = 'left';
+  ctx.beginPath(); ctx.moveTo(100,600); ctx.lineTo(340,600); ctx.stroke();
+  ctx.fillStyle = '#4A3A22'; ctx.font = '700 16px Georgia, serif';
+  ctx.fillText(document.getElementById('certSign').textContent, 100, 625);
+
+  ctx.textAlign = 'right';
+  ctx.beginPath(); ctx.moveTo(660,600); ctx.lineTo(900,600); ctx.stroke();
+  ctx.fillStyle = '#8A6E3C'; ctx.font = '13px Georgia, serif';
+  ctx.fillText(document.getElementById('certDate').textContent, 900, 625);
+
+  const link = document.createElement('a');
+  link.download = 'certificate-of-being-loved.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+const downloadBtn = document.getElementById('downloadCertBtn');
+if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
+
+/* ============ REVIEW PAGE ============ */
+(function initReview(){
+  const starsWrap = document.getElementById('reviewStars');
+  const noteBox = document.getElementById('reviewNote');
+  const submitBtn = document.getElementById('reviewSubmitBtn');
+  const thanks = document.getElementById('reviewThanks');
+  if(!starsWrap) return;
+  const stars = [...starsWrap.querySelectorAll('.review-star')];
+  let rating = 0;
+
+  function paintStars(){
+    stars.forEach(s=> s.classList.toggle('filled', Number(s.dataset.value) <= rating));
+  }
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('cozyArcadeReview') || 'null');
+    if(saved){
+      rating = saved.rating || 0;
+      if(saved.note) noteBox.value = saved.note;
+      paintStars();
+      if(saved.rating){
+        thanks.textContent = 'Got it, saved right here for me to find later. Thank you, meri jaan. 💗';
+        thanks.classList.add('show');
+      }
+    }
+  } catch(e){}
+
+  stars.forEach(star=>{
+    star.addEventListener('click', ()=>{
+      rating = Number(star.dataset.value);
+      paintStars();
+    });
+    star.addEventListener('mouseenter', ()=>{
+      const hoverVal = Number(star.dataset.value);
+      stars.forEach(s=> s.classList.toggle('filled', Number(s.dataset.value) <= hoverVal));
+    });
+  });
+  starsWrap.addEventListener('mouseleave', paintStars);
+
+  submitBtn.addEventListener('click', ()=>{
+    const note = noteBox.value.trim();
+    try {
+      localStorage.setItem('cozyArcadeReview', JSON.stringify({ rating, note, savedAt: Date.now() }));
+    } catch(e){}
+    thanks.textContent = rating
+      ? 'Thank you, meri jaan. Saved right here for me to find later. 💗'
+      : 'Saved your note, meri jaan. 💗';
+    thanks.classList.add('show');
+    sparkleBurst();
+  });
+})();
 
 </script>
 
@@ -1388,25 +1703,5 @@ function startQuiz(){
 })();
 </script>
 
-<script id="flower-petal-normalizer">
-(function(){
-  function normalizeFlower(){
-    const root=document.querySelector("#flower-game svg");
-    if(!root) return;
-    const petals=[...root.querySelectorAll(".petal")];
-    if(!petals.length) return;
-    const cx=200, cy=150, radius=68;
-    petals.forEach((p,i)=>{
-      const angle=(i/petals.length)*Math.PI*2-Math.PI/2;
-      const x=cx+Math.cos(angle)*radius;
-      const y=cy+Math.sin(angle)*radius;
-      p.setAttribute("transform","translate("+x+" "+y+") rotate("+(angle*180/Math.PI+90)+")");
-      p.dataset.flowerAngle=angle;
-    });
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",normalizeFlower);
-  else normalizeFlower();
-})();
-</script>
 </body>
 </html>
