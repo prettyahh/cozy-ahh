@@ -404,9 +404,10 @@
     transition: transform .15s ease;
   }
   .bubble:hover { transform: scale(1.08); }
-  @media (prefers-reduced-motion: no-preference) {
-    .bubble { animation: floatUp linear forwards; }
-  }
+  /* Not gated behind prefers-reduced-motion: this animation is what carries the
+     bubble from its off-screen start position into view, so it must always run
+     or the bubble is invisible (not just "less animated"). */
+  .bubble { animation: floatUp linear forwards; }
   @keyframes floatUp {
     to { transform: translateY(-480px); opacity: 0.1; }
   }
@@ -427,9 +428,9 @@
     font-size: 25px;
     user-select: none;
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .falling-star { animation: fall linear forwards; }
-  }
+  /* Same reasoning as .bubble above: this animation carries the star from
+     off-screen into the visible field, so it always needs to run. */
+  .falling-star { animation: fall linear forwards; }
   @keyframes fall {
     to { transform: translateY(460px); }
   }
