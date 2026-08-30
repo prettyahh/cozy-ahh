@@ -275,7 +275,7 @@
     font-weight: 700;
     font-size: 15px;
     box-shadow: var(--shadow);
-    display: none;
+    display: inline-block;
   }
   .final-note-btn.show { display: inline-block; }
   .final-note-btn:hover { background: var(--lavender-deep); transform: translateY(-2px); }
@@ -1304,7 +1304,7 @@ function syncCompletedUI(){
       document.querySelector('.progress-dot[data-game="'+game+'"]').classList.add('done');
     }
   });
-  if(Object.values(completed).every(v=>v)) document.getElementById('finalBtn')?.classList.add('show');
+  document.getElementById('finalBtn')?.classList.add('show');
 }
 window.addEventListener('DOMContentLoaded', syncCompletedUI);
 
