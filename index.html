@@ -1781,31 +1781,44 @@ function downloadCertificate(){
 const downloadBtn = document.getElementById('downloadCertBtn');
 if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
 
-/* ============ REVIEW PAGE ============ */
-(function initReview(){
+/* ============ REVIEW PAGE (FIREBASE / SHARED ACROSS DEVICES) ============ */
+(async function initReview(){
   const starsWrap = document.getElementById('reviewStars');
   const noteBox = document.getElementById('reviewNote');
   const submitBtn = document.getElementById('reviewSubmitBtn');
   const thanks = document.getElementById('reviewThanks');
-  if(!starsWrap) return;
+  if(!starsWrap || !noteBox || !submitBtn) return;
 
   const stars = [...starsWrap.querySelectorAll('.review-star')];
   let rating = 0;
-
-  function getReviews(){
-    try{
-      const saved = JSON.parse(localStorage.getItem('cozyArcadeReviews') || '[]');
-      if(Array.isArray(saved)) return saved;
-    }catch(e){}
-    return [];
-  }
-
-  function saveReviews(reviews){
-    try{ localStorage.setItem('cozyArcadeReviews', JSON.stringify(reviews)); }catch(e){}
-  }
+  let reviews = [];
 
   function paintStars(){
     stars.forEach(s => s.classList.toggle('filled', Number(s.dataset.value) <= rating));
+  }
+
+  function sortedReviews(){
+    return [...reviews].sort((a,b) => (Number(a.savedAt) || 0) - (Number(b.savedAt) || 0));
+  }
+
+  function reviewMarkup(review){
+    const safeRating = Math.max(0, Math.min(5, Number(review.rating) || 0));
+    const starsText = '★'.repeat(safeRating) + '☆'.repeat(5-safeRating);
+    const dateText = review.savedAt ? new Date(review.savedAt).toLocaleString() : '';
+    return `
+      <div class="hub-review-item">
+        <div class="hub-review-rating">${starsText}</div>
+        <div class="hub-review-note"></div>
+        ${dateText ? `<div class="hub-review-date">${dateText}</div>` : ''}
+      </div>`;
+  }
+
+  function fillReviewNotes(container, ordered){
+    const items = [...container.querySelectorAll('.hub-review-item')];
+    ordered.forEach((review, i) => {
+      const noteEl = items[i]?.querySelector('.hub-review-note');
+      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
+    });
   }
 
   function renderHubReviews(){
@@ -1814,72 +1827,34 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
     const box = document.getElementById('hubReviewBox');
     if(!list || !count || !box) return;
 
-    const reviews = getReviews();
-    count.textContent = reviews.length;
+    const ordered = sortedReviews().reverse();
+    count.textContent = ordered.length;
 
-    if(!reviews.length){
+    if(!ordered.length){
       list.innerHTML = '<div class="hub-review-empty">No reviews yet. Be the first one to leave a little note. ♡</div>';
       box.classList.remove('show');
       return;
     }
 
     box.classList.add('show');
-    list.innerHTML = reviews.slice().reverse().map((review, index) => {
-      const safeRating = Math.max(0, Math.min(5, Number(review.rating) || 0));
-      const starsText = '★'.repeat(safeRating) + '☆'.repeat(5-safeRating);
-      const dateText = review.savedAt ? new Date(review.savedAt).toLocaleString() : '';
-      const note = review.note ? review.note : 'No written note — just a star rating. ♡';
-      return `
-        <div class="hub-review-item">
-          <div class="hub-review-rating">${starsText}</div>
-          <div class="hub-review-note"></div>
-          ${dateText ? `<div class="hub-review-date">${dateText}</div>` : ''}
-        </div>
-      `;
-    }).join('');
-
-    // Insert notes as text rather than HTML so review content cannot inject markup.
-    const items = [...list.querySelectorAll('.hub-review-item')];
-    reviews.slice().reverse().forEach((review, i) => {
-      const noteEl = items[i]?.querySelector('.hub-review-note');
-      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
-    });
+    list.innerHTML = ordered.map(reviewMarkup).join('');
+    fillReviewNotes(list, ordered);
   }
 
   function renderReviewsViewer(){
     const list = document.getElementById('reviewsViewerList');
     if(!list) return;
-    const reviews = getReviews();
-    if(!reviews.length){
+    const ordered = sortedReviews().reverse();
+    if(!ordered.length){
       list.innerHTML = '<div class="hub-review-empty">No reviews yet. ♡</div>';
       return;
     }
-    list.innerHTML = reviews.slice().reverse().map(review => {
-      const safeRating = Math.max(0, Math.min(5, Number(review.rating) || 0));
-      const starsText = '★'.repeat(safeRating) + '☆'.repeat(5-safeRating);
-      const dateText = review.savedAt ? new Date(review.savedAt).toLocaleString() : '';
-      return `
-        <div class="hub-review-item">
-          <div class="hub-review-rating">${starsText}</div>
-          <div class="hub-review-note"></div>
-          ${dateText ? `<div class="hub-review-date">${dateText}</div>` : ''}
-        </div>`;
-    }).join('');
-    const items = [...list.querySelectorAll('.hub-review-item')];
-    reviews.slice().reverse().forEach((review, i) => {
-      const noteEl = items[i]?.querySelector('.hub-review-note');
-      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
-    });
+    list.innerHTML = ordered.map(reviewMarkup).join('');
+    fillReviewNotes(list, ordered);
   }
 
-  // Migrate the old single-review format if it exists.
-  try{
-    const old = JSON.parse(localStorage.getItem('cozyArcadeReview') || 'null');
-    const current = getReviews();
-    if(old && (old.rating || old.note) && !current.length){
-      saveReviews([old]);
-    }
-  }catch(e){}
+  window.renderHubReviews = renderHubReviews;
+  window.renderReviewsViewer = renderReviewsViewer;
 
   stars.forEach(star=>{
     star.addEventListener('click', ()=>{
@@ -1893,34 +1868,73 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
   });
   starsWrap.addEventListener('mouseleave', paintStars);
 
-  submitBtn.addEventListener('click', ()=>{
-    const note = noteBox.value.trim();
+  try{
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js');
+    const { getFirestore, collection, addDoc, onSnapshot } = await import('https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js');
 
-    if(!rating && !note){
-      thanks.textContent = 'Pick a star or leave a little note first, meri jaan. 💗';
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR0-L6EkDjPsT-MvKd5-VHf9tL8mUY",
+      authDomain: "cozy-ahh.firebaseapp.com",
+      projectId: "cozy-ahh",
+      storageBucket: "cozy-ahh.firebasestorage.app",
+      messagingSenderId: "984307206049",
+      appId: "1:984307206049:web:88aaf35aed277dc49a2580",
+      measurementId: "G-ZTI77YCVP9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const reviewsRef = collection(db, 'reviews');
+
+    // Listen for changes in real time so reviews submitted on any device appear everywhere.
+    onSnapshot(reviewsRef, (snapshot) => {
+      reviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderHubReviews();
+      renderReviewsViewer();
+    }, (error) => {
+      console.error('Could not load reviews from Firebase:', error);
+      thanks.textContent = 'Reviews could not load right now. Please try again. 💗';
       thanks.classList.add('show');
-      return;
-    }
+    });
 
-    const reviews = getReviews();
-    reviews.push({ rating, note, savedAt: Date.now() });
-    saveReviews(reviews);
+    submitBtn.addEventListener('click', async ()=>{
+      const note = noteBox.value.trim();
 
-    thanks.textContent = 'Thank you, meri jaan. Your review is saved and added to the arcade. 💗';
-    thanks.classList.add('show');
+      if(!rating && !note){
+        thanks.textContent = 'Pick a star or leave a little note first, meri jaan. 💗';
+        thanks.classList.add('show');
+        return;
+      }
 
-    // Clear the form so another review can be submitted as a separate entry.
-    rating = 0;
-    noteBox.value = '';
-    paintStars();
+      const reviewToSave = { rating, note, savedAt: Date.now() };
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Saving...';
+
+      try{
+        await addDoc(reviewsRef, reviewToSave);
+        thanks.textContent = 'Thank you, meri jaan. Your review is saved and added to the arcade. 💗';
+        thanks.classList.add('show');
+        rating = 0;
+        noteBox.value = '';
+        paintStars();
+        sparkleBurst();
+      }catch(error){
+        console.error('Could not save review:', error);
+        thanks.textContent = 'Could not save your review. Please try again. 💗';
+        thanks.classList.add('show');
+      }finally{
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
 
     renderHubReviews();
-    sparkleBurst();
-  });
-
-  renderHubReviews();
-  window.renderHubReviews = renderHubReviews;
-  window.renderReviewsViewer = renderReviewsViewer;
+  }catch(error){
+    console.error('Firebase setup error:', error);
+    thanks.textContent = 'Could not connect reviews right now. Please refresh and try again. 💗';
+    thanks.classList.add('show');
+  }
 })();
 
 /* Keep the hub review list/count fresh whenever the hub is opened. */
