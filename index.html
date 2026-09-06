@@ -164,7 +164,7 @@
 
   /* ---------- Sound panel: on/off toggle + music/game volume sliders ---------- */
   .sound-panel {
-    position: absolute;
+    position: fixed;
     top: 14px;
     right: 14px;
     z-index: 60;
@@ -231,8 +231,16 @@
     background: var(--sage);
     cursor: pointer;
   }
+  /* Keep the floating sound control out of the text area. The page content
+     gets a small reserved strip on phones so the control never covers words. */
+  .hub-header { padding-right: 190px; }
   @media (max-width: 520px) {
-    .sound-panel { top: 10px; right: 10px; width: 140px; padding: 8px; }
+    .sound-panel {
+      top: 10px; right: 10px; width: 140px; padding: 8px;
+      box-sizing: border-box;
+    }
+    .hub-header { padding-right: 0; padding-top: 76px; }
+    .screen { padding-top: 90px; }
   }
 
   /* ---------- Mascot: a sleepy little star ---------- */
@@ -1084,7 +1092,7 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
   <div class="hub-header">
     <div class="eyebrow">a tiny arcade, built just for you</div>
     <h1>Skip the reels for a while. Come play with me instead ⭐</h1>
-    <p>A growing collection of tiny cozy games. No complicated rules, no pressure — just play and have fun. ♡</p>
+    <p>A growing collection of tiny cozy games. No complicated rules, no pressure  just play and have fun. ♡</p>
     <button class="achievements-open-btn" type="button" onclick="openAchievements()">🏆 Achievements <span id="achievementCount">0 / 14</span></button>
   </div>
 
@@ -1370,6 +1378,113 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script>
+/* ---------- Firebase cloud sync ----------
+   Replace the values below with the Web App config from your Firebase project.
+   This stores arcade progress/achievements and reviews in Firestore so they can
+   be seen from phones, tablets and computers.
+*/
+window.COZY_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCRO-L6kLEkDjPsT-MvKvd5-VHf9tL8mUY",
+  authDomain: "cozy-ahh.firebaseapp.com",
+  projectId: "cozy-ahh",
+  storageBucket: "cozy-ahh.firebasestorage.app",
+  messagingSenderId: "984307026049",
+  appId: "1:984307026049:web:88aaf35aed277dc49a2580",
+  measurementId: "G-ZT177YCVP9"
+};
+
+window.CloudStore = {
+  enabled: false,
+  db: null,
+  ready: null,
+  cloudReviews: [],
+  async init(){
+    this.ready = (async()=>{
+      try{
+        const cfg=window.COZY_FIREBASE_CONFIG;
+        if(!cfg || !cfg.apiKey || cfg.apiKey.indexOf('PASTE_')===0 || !cfg.projectId || cfg.projectId.indexOf('PASTE_')===0) return false;
+        if(!firebase.apps.length) firebase.initializeApp(cfg);
+        await firebase.auth().signInAnonymously();
+        this.db=firebase.firestore();
+        this.enabled=true;
+        return true;
+      }catch(err){
+        console.warn('Firebase cloud sync is unavailable:', err);
+        this.enabled=false;
+        return false;
+      }
+    })();
+    return this.ready;
+  },
+  async syncState(localCompleted, localAchievements){
+    if(!this.enabled) return;
+    try{
+      const ref=this.db.collection('arcade').doc('state');
+      const snap=await ref.get();
+      let cloud={completed:{}, achievements:{}};
+      if(snap.exists) cloud=snap.data()||cloud;
+      const mergedCompleted={...(cloud.completed||{})};
+      Object.keys(localCompleted||{}).forEach(k=>{ if(localCompleted[k]) mergedCompleted[k]=true; });
+      const mergedAchievements={...(cloud.achievements||{})};
+      Object.keys(localAchievements||{}).forEach(k=>{ if(localAchievements[k]) mergedAchievements[k]=true; });
+      await ref.set({completed:mergedCompleted, achievements:mergedAchievements, updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      if(typeof window.applyArcadeCloudState === 'function'){
+        window.applyArcadeCloudState(mergedCompleted, mergedAchievements);
+      }else{
+        localStorage.setItem('cozyArcadeCompleted',JSON.stringify(mergedCompleted));
+        localStorage.setItem('cozyArcadeAchievements',JSON.stringify(mergedAchievements));
+      }
+      if(typeof evaluateAchievements==='function') evaluateAchievements();
+      if(typeof renderAchievements==='function') renderAchievements();
+    }catch(err){ console.warn('Could not sync arcade progress:',err); }
+  },
+  async loadReviews(){
+    if(!this.enabled) return;
+    try{
+      const snap=await this.db.collection('arcadeReviews').orderBy('savedAt','desc').get();
+      this.cloudReviews=snap.docs.map(d=>({id:d.id,...d.data()}));
+      if(typeof window.renderHubReviews==='function') window.renderHubReviews();
+      if(typeof window.renderReviewsViewer==='function') window.renderReviewsViewer();
+    }catch(err){
+      console.warn('Could not load cloud reviews:',err);
+    }
+  },
+  async migrateLocalReviews(){
+    if(!this.enabled) return;
+    try{
+      if(localStorage.getItem('cozyArcadeReviewsMigratedToFirebase')==='1') return;
+      const local=JSON.parse(localStorage.getItem('cozyArcadeReviews')||'[]');
+      if(Array.isArray(local)){
+        for(const review of local){
+          await this.db.collection('arcadeReviews').add({rating:Number(review.rating)||0,note:String(review.note||''),savedAt:Number(review.savedAt)||Date.now()});
+        }
+      }
+      localStorage.setItem('cozyArcadeReviewsMigratedToFirebase','1');
+    }catch(err){ console.warn('Could not migrate local reviews:',err); }
+  },
+  async addReview(review){
+    if(!this.enabled) return false;
+    try{
+      await this.db.collection('arcadeReviews').add({rating:Number(review.rating)||0,note:String(review.note||''),savedAt:Number(review.savedAt)||Date.now()});
+      await this.loadReviews();
+      return true;
+    }catch(err){
+      console.warn('Could not save review to Firebase:',err);
+      return false;
+    }
+  }
+};
+CloudStore.init().then(async(ok)=>{
+  if(ok){
+    await CloudStore.migrateLocalReviews();
+    await CloudStore.loadReviews();
+  }
+});
+</script>
 <script>
 // Keep mobile taps/long-presses from turning the arcade UI into browser text selection.
 document.addEventListener('contextmenu', (e) => {
@@ -1461,7 +1576,7 @@ const messagesByGame = {
 const wrongReplies = [
   "No stress, my bebi. That answer does not change how much I love you. 🤍",
   "Close one, meri jaan. And hey, you are never in trouble for getting a question wrong.",
-  "Not quite — but I am still smiling at you through the screen.",
+  "Not quite  but I am still smiling at you through the screen.",
   "Wrong answer, zero punishment. Come here, you get a virtual hug instead. 🫂"
 ];
 
@@ -1480,7 +1595,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     q: "If something goes wrong around you, whose fault is it automatically?",
-    options: ["Yours", "Mine", "Whoever is easiest to blame", "Nobody's automatically — we figure out what is actually yours to carry"],
+    options: ["Yours", "Mine", "Whoever is easiest to blame", "Nobody's automatically  we figure out what is actually yours to carry"],
     correct: 3,
     reply: "Yes. Please keep that one close. You do not have to turn every difficult thing into evidence against yourself."
   },
@@ -1492,7 +1607,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     q: "What happens to my love for you on your quiet, tired, or not-your-best days?",
-    options: ["It disappears", "It gets smaller", "Nothing — I still love you", "You have to earn it back"],
+    options: ["It disappears", "It gets smaller", "Nothing  I still love you", "You have to earn it back"],
     correct: 2,
     reply: "Exactly. You never need to earn your way back into my heart. You are already there."
   },
@@ -1589,7 +1704,7 @@ const AudioFX = (() => {
   try { const v=localStorage.getItem('cozyArcadeMusicVol'); if(v!==null) musicVol=parseFloat(v); } catch(e){}
   try { const v=localStorage.getItem('cozyArcadeSfxVol'); if(v!==null) sfxVol=parseFloat(v); } catch(e){}
 
-  // The music's volume *at 100% on the slider* — kept gentle since this
+  // The music's volume *at 100% on the slider*  kept gentle since this
   // is a background bed, not a track to listen to on its own.
   const MUSIC_LEVEL = 0.05;
 
@@ -1710,7 +1825,7 @@ const AudioFX = (() => {
   }
 
   // Briefly dips the music under any game sound effect, then eases
-  // back up — like a DJ turning the music down for an announcement.
+  // back up  like a DJ turning the music down for an announcement.
   function duckMusic(){
     if(!playingMusic || !ctx || !musicBus) return;
     const now = ctx.currentTime;
@@ -1965,10 +2080,33 @@ try {
   if(savedA && typeof savedA === 'object') achievements = savedA;
 } catch(e) {}
 
+// Lets Firebase apply the shared cloud state to the app's live variables.
+window.applyArcadeCloudState = function(cloudCompleted, cloudAchievements){
+  completed = { ...defaultCompleted, ...cloudCompleted };
+  achievements = { ...achievements, ...cloudAchievements };
+  try{
+    localStorage.setItem('cozyArcadeCompleted', JSON.stringify(completed));
+    localStorage.setItem('cozyArcadeAchievements', JSON.stringify(achievements));
+  }catch(e){}
+  if(typeof syncCompletedUI === 'function') syncCompletedUI();
+  if(typeof evaluateAchievements === 'function') evaluateAchievements();
+  if(typeof renderAchievements === 'function') renderAchievements();
+};
+
+window.addEventListener('DOMContentLoaded', async ()=>{
+  try{
+    if(window.CloudStore?.ready) await window.CloudStore.ready;
+    if(window.CloudStore?.enabled) await window.CloudStore.syncState(completed, achievements);
+  }catch(e){ console.warn('Initial cloud state sync failed:', e); }
+});
+
 function saveProgress(){
   try{
     localStorage.setItem('cozyArcadeCompleted', JSON.stringify(completed));
     localStorage.setItem('cozyArcadeAchievements', JSON.stringify(achievements));
+  }catch(e){}
+  try{
+    if(window.CloudStore?.enabled) window.CloudStore.syncState(completed, achievements);
   }catch(e){}
 }
 
@@ -2555,6 +2693,7 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
   let rating = 0;
 
   function getReviews(){
+    if(window.CloudStore?.enabled && Array.isArray(window.CloudStore.cloudReviews)) return window.CloudStore.cloudReviews;
     try{
       const saved = JSON.parse(localStorage.getItem('cozyArcadeReviews') || '[]');
       if(Array.isArray(saved)) return saved;
@@ -2590,7 +2729,7 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
       const safeRating = Math.max(0, Math.min(5, Number(review.rating) || 0));
       const starsText = '★'.repeat(safeRating) + '☆'.repeat(5-safeRating);
       const dateText = review.savedAt ? new Date(review.savedAt).toLocaleString() : '';
-      const note = review.note ? review.note : 'No written note — just a star rating. ♡';
+      const note = review.note ? review.note : 'No written note  just a star rating. ♡';
       return `
         <div class="hub-review-item">
           <div class="hub-review-rating">${starsText}</div>
@@ -2604,7 +2743,7 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
     const items = [...list.querySelectorAll('.hub-review-item')];
     reviews.slice().reverse().forEach((review, i) => {
       const noteEl = items[i]?.querySelector('.hub-review-note');
-      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
+      if(noteEl) noteEl.textContent = review.note || 'No written note  just a star rating. ♡';
     });
   }
 
@@ -2630,7 +2769,7 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
     const items = [...list.querySelectorAll('.hub-review-item')];
     reviews.slice().reverse().forEach((review, i) => {
       const noteEl = items[i]?.querySelector('.hub-review-note');
-      if(noteEl) noteEl.textContent = review.note || 'No written note — just a star rating. ♡';
+      if(noteEl) noteEl.textContent = review.note || 'No written note  just a star rating. ♡';
     });
   }
 
@@ -2664,9 +2803,14 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
       return;
     }
 
+    const newReview = { rating, note, savedAt: Date.now() };
     const reviews = getReviews();
-    reviews.push({ rating, note, savedAt: Date.now() });
+    reviews.push(newReview);
     saveReviews(reviews);
+
+    if(window.CloudStore?.enabled){
+      window.CloudStore.addReview(newReview);
+    }
 
     thanks.textContent = 'Thank you, meri jaan. Your review is saved and added to the arcade. 💗';
     thanks.classList.add('show');
@@ -2690,7 +2834,7 @@ if(downloadBtn) downloadBtn.addEventListener('click', downloadCertificate);
 /* ============ EXTRA MINI GAMES ============ */
 const extraMessagesByGame = {
   mole: [
-    "Bonk bonk bonk, meri jaan — mole champion, official title, no takebacks. I'm over here cheering way too loud for a silly little game, but that's just what you do to me.",
+    "Bonk bonk bonk, meri jaan  mole champion, official title, no takebacks. I'm over here cheering way too loud for a silly little game, but that's just what you do to me.",
     "My bebi, that reflexes-of-a-superhero energy is exactly why I never win when we play anything together. I'll take the loss every single time if it means watching you smile like that.",
     "You caught every single one, my love. Just like you catch every version of me, the good days and the messy ones, without ever letting go."
   ],
@@ -2935,7 +3079,7 @@ dino:()=>{
   window.addEventListener('keydown',keyHandler);
   function drawDino(x,y,squash,legPhase){
     ctx.save(); ctx.translate(x,y); ctx.scale(1,squash);
-    /* A rounder, chubbier, more saturated green palette on purpose —
+    /* A rounder, chubbier, more saturated green palette on purpose 
        reads as "cute baby dino" rather than the flatter desaturated
        sage tone it had before. */
     const green='#6FC493', greenDark='#3F9268', greenLight='#B7ECCB';
@@ -3025,7 +3169,7 @@ firefly:()=>{
   const gallery=document.getElementById('gallery');
   const colors=['var(--rose)','var(--gold)','var(--sage)','var(--lavender)','var(--rose-deep)'];
   /* Only a couple of balloons drift on screen at once instead of a
-     crowded sky — 2 or 3 floating at a time feels calmer and makes
+     crowded sky  2 or 3 floating at a time feels calmer and makes
      each one easier to actually aim for. */
   const concurrent=3;
   let popped=0, target=15, alive=true;
