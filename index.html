@@ -233,7 +233,7 @@
   }
   /* Keep the floating sound control out of the text area. The page content
      gets a small reserved strip on phones so the control never covers words. */
-  .hub-header { padding-right: 0; }
+  .hub-header { padding-right: 190px; }
   @media (max-width: 520px) {
     .sound-panel {
       top: 10px; right: 10px; width: 140px; padding: 8px;
@@ -1704,8 +1704,12 @@ const AudioFX = (() => {
   try { const v=localStorage.getItem('cozyArcadeMusicVol'); if(v!==null) musicVol=parseFloat(v); } catch(e){}
   try { const v=localStorage.getItem('cozyArcadeSfxVol'); if(v!==null) sfxVol=parseFloat(v); } catch(e){}
 
-  // The music's volume *at 100% on the slider*  kept gentle since this
-  // is a background bed, not a track to listen to on its own.
+  // Mobile speakers/headphone output can be noticeably quieter with WebAudio,
+  // so give phones/tablets a gentle gain boost without changing desktop audio.
+  const MOBILE_AUDIO_BOOST = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 1.8 : 1;
+
+  // The music's volume *at 100% on the slider* is kept gentle on desktop,
+  // with the mobile boost applied only where needed.
   const MUSIC_LEVEL = 0.05;
 
   function ensureCtx(){
@@ -1738,7 +1742,7 @@ const AudioFX = (() => {
     // Sound effects get their own bus straight to the speakers, so
     // ducking the music bus never touches game sound volume.
     sfxBus = c.createGain();
-    sfxBus.gain.value = sfxVol;
+    sfxBus.gain.value = sfxVol * MOBILE_AUDIO_BOOST;
     sfxBus.connect(c.destination);
     return c;
   }
@@ -1758,7 +1762,7 @@ const AudioFX = (() => {
   ];
   let chordIndex = 0;
 
-  function musicTarget(){ return MUSIC_LEVEL*musicVol; }
+  function musicTarget(){ return MUSIC_LEVEL*musicVol*MOBILE_AUDIO_BOOST; }
 
   function playChord(chord, dur){
     const c = ctx; if(!c || !musicBus) return;
@@ -1902,7 +1906,7 @@ const AudioFX = (() => {
   function setSfxVolume(v){
     sfxVol = Math.max(0, Math.min(1, v));
     try{ localStorage.setItem('cozyArcadeSfxVol', sfxVol); }catch(e){}
-    if(sfxBus) sfxBus.gain.value = sfxVol;
+    if(sfxBus) sfxBus.gain.value = sfxVol * MOBILE_AUDIO_BOOST;
   }
   function getMusicVolume(){ return musicVol; }
   function getSfxVolume(){ return sfxVol; }
