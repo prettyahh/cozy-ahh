@@ -3184,9 +3184,9 @@ flappy:()=>{
   setupExtra('flappy', '<canvas id="flappyCanvas" class="g-flappy-canvas" width="420" height="360" aria-label="Flappy Bird game"></canvas>', 'Score: 0 / 15');
   const canvas=document.getElementById('flappyCanvas'), ctx=canvas.getContext('2d');
   const target=15;
-  let score=0, bird={x:88,y:180,vy:0,r:12}, pipes=[], alive=true, lastT=performance.now(), spawnTimer=0;
+  let score=0, bird={x:88,y:180,vy:0,r:12}, pipes=[], alive=true, started=false, lastT=performance.now(), spawnTimer=0;
   const gravity=0.42, flapPower=-7.2, gap=128, pipeWidth=48, pipeSpeed=2.35;
-  function flap(){ if(!alive || extraStarted.flappy.ended) return; bird.vy=flapPower; AudioFX.jump(); }
+  function flap(){ if(!alive || extraStarted.flappy.ended) return; if(!started){ started=true; lastT=performance.now(); addPipe(); requestAnimationFrame(loop); } bird.vy=flapPower; AudioFX.jump(); }
   function press(e){ e.preventDefault(); flap(); }
   canvas.addEventListener('pointerdown',press,{passive:false});
   window.addEventListener('keydown',e=>{ if(e.code==='Space'){ e.preventDefault(); flap(); } });
@@ -3195,8 +3195,8 @@ flappy:()=>{
   function drawPipe(x,y,w,h){ ctx.fillStyle='#8FBFAE'; ctx.fillRect(x,y,w,h); ctx.fillStyle='#6FA391'; ctx.fillRect(x-4,y,w+8,14); ctx.fillStyle='rgba(255,255,255,.08)'; ctx.fillRect(x+7,y+4,5,Math.max(0,h-8)); }
   function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='rgba(217,174,110,.22)'; for(let i=0;i<5;i++){const cx=50+i*92,cy=55+(i%2)*35;ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2);ctx.fill();} pipes.forEach(p=>{drawPipe(p.x,0,pipeWidth,p.top);drawPipe(p.x,p.top+gap,pipeWidth,canvas.height-(p.top+gap));}); ctx.fillStyle='rgba(217,174,110,.55)';ctx.fillRect(0,canvas.height-10,canvas.width,10);drawBird(); }
   function endGame(){ alive=false; if(score>=target){ finishExtra('flappy',extraMessagesByGame.flappy); return; } document.getElementById('flappyScore').textContent='Score: '+score+' / '+target+'  (try again!)'; const msg=document.getElementById('top-message-flappy'),controls=document.getElementById('end-controls-flappy'); if(msg){msg.innerHTML='<div class="game-top-message-heart">♡</div>You hit a pipe. Get to 15 and you win!';msg.hidden=false;} if(controls)controls.hidden=false; }
-  function loop(t){ if(!alive)return; const dt=Math.min(32,t-lastT);lastT=t; const scale=dt/16.67; bird.vy+=gravity*scale;bird.y+=bird.vy*scale;spawnTimer-=dt;if(spawnTimer<=0){addPipe();spawnTimer=1450;} pipes.forEach(p=>{p.x-=pipeSpeed*scale;if(!p.scored&&p.x+pipeWidth<bird.x){p.scored=true;score++;AudioFX.pop();document.getElementById('flappyScore').textContent='Score: '+score+' / '+target;if(score>=target){endGame();}}}); pipes=pipes.filter(p=>p.x>-pipeWidth-10); const hitTop=bird.y-bird.r<=0,hitGround=bird.y+bird.r>=canvas.height-10,hitPipe=pipes.some(p=>bird.x+bird.r>p.x&&bird.x-bird.r<p.x+pipeWidth&&(bird.y-bird.r<p.top||bird.y+bird.r>p.top+gap)); draw();if(hitTop||hitGround||hitPipe){endGame();return;} requestAnimationFrame(loop); }
-  addPipe(); requestAnimationFrame(loop);
+  function loop(t){ if(!alive || !started)return; const dt=Math.min(32,t-lastT);lastT=t; const scale=dt/16.67; bird.vy+=gravity*scale;bird.y+=bird.vy*scale;spawnTimer-=dt;if(spawnTimer<=0){addPipe();spawnTimer=1450;} pipes.forEach(p=>{p.x-=pipeSpeed*scale;if(!p.scored&&p.x+pipeWidth<bird.x){p.scored=true;score++;AudioFX.pop();document.getElementById('flappyScore').textContent='Score: '+score+' / '+target;if(score>=target){endGame();}}}); pipes=pipes.filter(p=>p.x>-pipeWidth-10); const hitTop=bird.y-bird.r<=0,hitGround=bird.y+bird.r>=canvas.height-10,hitPipe=pipes.some(p=>bird.x+bird.r>p.x&&bird.x-bird.r<p.x+pipeWidth&&(bird.y-bird.r<p.top||bird.y+bird.r>p.top+gap)); draw();if(hitTop||hitGround||hitPipe){endGame();return;} requestAnimationFrame(loop); }
+  draw();
 },
 
 /* ---- Balloon Pop: CSS-drawn balloons drifting up, tap to pop ---- */
