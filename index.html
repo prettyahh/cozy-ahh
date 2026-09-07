@@ -332,6 +332,7 @@
   .icon-fish { color: var(--sage); }
   .icon-balloon { color: var(--rose-deep); }
 .icon-flappy { color: var(--gold); }
+.icon-doodle { color: var(--rose); }
   .card h3 { font-size: 17px; margin-bottom: 6px; }
   .card p { font-size: 13px; color: var(--text-soft); margin-bottom: 16px; min-height: 34px; line-height: 1.4; }
   .play-btn {
@@ -748,16 +749,23 @@
 .g-board{position:relative;height:320px}
 .g-hole{position:absolute;width:76px;height:38px;bottom:0;border-radius:50% 50% 0 0/60% 60% 0 0;background:radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 70%, transparent 100%);transform:translate(-50%,0)}
 .g-mole-slot{position:absolute;width:60px;height:76px;transform:translate(-50%,0);overflow:hidden;pointer-events:none}
-.g-mole{position:absolute;bottom:4px;left:0;width:100%;height:56px;transform:translateY(132%);transition:transform .16s cubic-bezier(.34,1.56,.64,1);cursor:pointer;touch-action:manipulation;pointer-events:auto}
-.g-mole.up{transform:translateY(0)}
+.g-mole{position:absolute;bottom:4px;left:0;width:100%;height:56px;transform:translateY(132%);transition:transform .18s cubic-bezier(.34,1.56,.64,1);cursor:pointer;touch-action:manipulation;pointer-events:auto}
+.g-mole.up{transform:translateY(0);animation:bounceIn .18s cubic-bezier(.34,1.56,.64,1)}
 .g-mole.bonked .g-mole-body{transform:scale(.82,1.12)}
+.g-mole.bonked .g-mole-eye{transform:scaleY(.3);border-radius:50%/100%}
+.g-mole.bonked .g-mole-mouth{opacity:1;transform:scale(1)}
 .g-mole-body{position:relative;width:100%;height:100%;border-radius:50% 50% 46% 46%;background:linear-gradient(160deg,var(--gold),var(--gold-deep));box-shadow:inset 0 -6px 10px rgba(0,0,0,.2);transition:transform .12s ease}
 .g-mole-ear{position:absolute;top:-6px;width:16px;height:16px;border-radius:50%;background:var(--gold-deep)}
 .g-mole-ear.l{left:2px}.g-mole-ear.r{right:2px}
-.g-mole-eye{position:absolute;top:20px;width:7px;height:9px;border-radius:50%;background:#2E2440}
-.g-mole-eye.l{left:14px}.g-mole-eye.r{right:14px}
-.g-mole-nose{position:absolute;top:30px;left:50%;width:9px;height:7px;border-radius:50%;background:var(--rose-deep);transform:translateX(-50%)}
-.g-poof{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--rose);pointer-events:none;animation:gPoof .42s ease-out forwards}
+.g-mole-eye{position:absolute;top:18px;width:8px;height:10px;border-radius:50%;background:#2E2440;transition:transform .1s ease}
+.g-mole-eye.l{left:12px}.g-mole-eye.r{right:12px}
+.g-mole-eye::after{content:'';position:absolute;top:2px;left:2px;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.9}
+.g-mole-nose{position:absolute;top:32px;left:50%;width:10px;height:8px;border-radius:50%;background:var(--rose-deep);transform:translateX(-50%)}
+.g-mole-blush{position:absolute;top:34px;width:10px;height:6px;border-radius:50%;background:rgba(217,142,163,.6);opacity:.7}
+.g-mole-blush.l{left:4px}.g-mole-blush.r{right:4px}
+.g-mole-mouth{position:absolute;top:38px;left:50%;width:14px;height:6px;border:2px solid #2E2440;border-top:none;border-radius:0 0 7px 7px;transform:translateX(-50%) scale(0);opacity:0;transition:transform .15s ease, opacity .15s ease}
+@keyframes bounceIn{from{transform:translateY(40px) scale(.8)}to{transform:translateY(0) scale(1)}}
+@keyframes gPoof{ to{ transform:translate(var(--dx),var(--dy)) scale(0); opacity:0; } }
 @keyframes gPoof{ to{ transform:translate(var(--dx),var(--dy)) scale(0); opacity:0; } }
 
 /* ---------- Basketball ---------- */
@@ -777,16 +785,13 @@
 /* ---------- Catch the Fish ---------- */
 .g-pond{position:relative;height:230px;border-radius:16px 16px 0 0;background:linear-gradient(180deg, rgba(143,191,174,.35), rgba(111,163,145,.5));overflow:hidden}
 .g-land{height:70px;border-radius:0 0 16px 16px;background:var(--gold-deep);position:relative}
-.g-rod{position:absolute;top:8px;left:50%;width:70px;height:60px;transform:translateX(-50%) rotate(0deg);cursor:pointer;transform-origin:top center;transition:transform .18s ease;touch-action:manipulation}
-.g-rod::before{content:'';position:absolute;top:0;left:6px;width:4px;height:44px;background:var(--gold);border-radius:2px}
-.g-rod-line{position:absolute;top:44px;left:8px;width:2px;height:14px;background:rgba(231,222,233,.6)}
-.g-rod-hook{position:absolute;top:56px;left:5px;width:8px;height:8px;border:2px solid rgba(231,222,233,.7);border-top:none;border-right:none;border-radius:0 0 0 8px}
-.g-rod.casting{transform:translateX(-50%) rotate(-8deg)}
-.g-rod.caught{transform:translateX(-50%) rotate(12deg)}
-.g-fish{position:absolute;width:26px;height:16px;transition:left 1.4s linear}
-.g-fish-body{position:absolute;left:6px;width:20px;height:16px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;background:linear-gradient(160deg,var(--sage),var(--sage-deep))}
-.g-fish-tail{position:absolute;left:0;top:2px;width:8px;height:12px;background:var(--sage-deep);clip-path:polygon(100% 0,0 50%,100% 100%)}
-.g-fish-eye{position:absolute;left:20px;top:5px;width:3px;height:3px;border-radius:50%;background:#2E2440}
+.g-hook{position:absolute;top:8px;left:50%;width:3px;height:220px;pointer-events:none;z-index:10;display:flex;flex-direction:column;align-items:center;will-change:left}
+.g-hook-line{width:2px;height:0%;background:linear-gradient(180deg,rgba(231,222,233,.8),rgba(231,222,233,.5));border-radius:1px;transition:height .15s linear}
+.g-hook-head{width:14px;height:12px;border:2px solid var(--rose-deep);border-top:none;border-radius:0 0 7px 7px;background:var(--rose);margin-top:-2px}
+.g-fish{position:absolute;width:30px;height:18px;cursor:pointer}
+.g-fish-body{position:absolute;left:6px;width:22px;height:18px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%}
+.g-fish-tail{position:absolute;left:0;top:3px;width:10px;height:14px;clip-path:polygon(100% 0,0 50%,100% 100%)}
+.g-fish-eye{position:absolute;left:23px;top:5px;width:4px;height:4px;border-radius:50%;background:#2E2440}
 .g-bubble{position:absolute;bottom:-10px;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);animation:gBubbleUp linear infinite}
 @keyframes gBubbleUp{ from{ transform:translateY(0); opacity:.7; } to{ transform:translateY(-220px); opacity:0; } }
 .g-bar{width:min(420px,88%);height:22px;margin:12px auto;border-radius:999px;background:rgba(36,30,51,.55);position:relative;overflow:hidden}
@@ -798,6 +803,8 @@
 
 /* ---------- Flappy Bird ---------- */
 .g-flappy-canvas{display:block;width:min(420px,100%);height:auto;margin:0 auto;border-radius:20px;background:linear-gradient(180deg,#3a3350,#2c2640);touch-action:none;cursor:pointer;box-shadow:var(--shadow)}
+.g-doodle-canvas,.g-breakout-canvas,.g-snake-canvas{display:block;width:min(420px,100%);height:auto;margin:0 auto;border-radius:20px;background:linear-gradient(180deg,#3a3350,#2c2640);touch-action:none;cursor:pointer;box-shadow:var(--shadow)}
+
 
 /* ---------- Balloon Pop ---------- */
 .g-gallery{position:relative;height:320px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#3a3350,#2c2640)}
@@ -1097,7 +1104,7 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
     <div class="eyebrow">a tiny arcade, built just for you</div>
     <h1>Skip the reels for a while. Come play with me instead ⭐</h1>
     <p>A growing collection of tiny cozy games. No complicated rules, no pressure  just play and have fun. ♡</p>
-    <button class="achievements-open-btn" type="button" onclick="openAchievements()">🏆 Achievements <span id="achievementCount">0 / 14</span></button>
+    <button class="achievements-open-btn" type="button" onclick="openAchievements()">🏆 Achievements <span id="achievementCount">0 / 18</span></button>
   </div>
 
   <div class="card-grid">
@@ -1143,6 +1150,9 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
     <div class="card" tabindex="0" role="button" onclick="openScreen('dino')"><span class="icon icon-dino"><svg viewBox="0 0 48 48" fill="none"><path d="M10 38v-9c0-8 3-15 9-19 2-2 5-3 8-3 6 0 10 4 10 4l4-1-1 5 2 2-4 2c0 3-2 5-5 6v6l3 7h-6l-2-6h-3l-1 6H18l-1-6c-4-1-7-4-7-8v6z" fill="currentColor"/><circle cx="31" cy="12" r="1.6" fill="#2E2440"/></svg></span><h3>Dino Runner</h3><p>Tap to jump over incoming obstacles.</p><div class="play-btn">Play</div></div>
     <div class="card" tabindex="0" role="button" onclick="openScreen('firefly')"><span class="icon icon-balloon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6c-8 0-13 6-13 13 0 8 6 14 11 15.4-.3 1-1 1.6-1.8 2 0 .8.9 1.2 1.6.8.5-.3.9-.8 1.2-1.3.3.5.7 1 1.2 1.3.7.4 1.6 0 1.6-.8-.8-.4-1.5-1-1.8-2 5-1.4 11-7.4 11-15.4 0-7-5-13-13-13z" fill="currentColor"/><ellipse cx="19" cy="15" rx="3.2" ry="4.6" fill="#ffffff" opacity=".2"/><path d="M23 37l2 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><h3>Balloon Pop</h3><p>Pop all 15 balloons at your own pace.</p><div class="play-btn">Play</div></div>
     <div class="card" tabindex="0" role="button" onclick="openScreen('flappy')"><span class="icon icon-flappy"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 24c7-7 16-9 25-6l7 3-7 3c-9 3-18 1-25-6z" fill="currentColor"/><circle cx="30" cy="20" r="2" fill="#2E2440"/><path d="M8 24H3l5-4v8l-5-4M35 29l6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Flappy Bird</h3><p>Fly through 15 pipes to win.</p><div class="play-btn">Play</div></div>
+    <div class="card" tabindex="0" role="button" onclick="openScreen('doodle')"><span class="icon icon-doodle"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="39" width="32" height="5" rx="2.5" fill="currentColor"/><rect x="16.5" y="11" width="15" height="20" rx="7" fill="currentColor"/><ellipse cx="24" cy="22" rx="5.5" ry="6.5" fill="#F3EAD8"/><circle cx="20.5" cy="17.5" r="2.1" fill="#2E2440"/><circle cx="27.5" cy="17.5" r="2.1" fill="#2E2440"/><circle cx="21.4" cy="16.6" r="0.8" fill="#FFFFFF"/><circle cx="28.4" cy="16.6" r="0.8" fill="#FFFFFF"/><ellipse cx="17.8" cy="21.8" rx="1.8" ry="1.2" fill="#C77E95" opacity="0.7"/><ellipse cx="30.2" cy="21.8" rx="1.8" ry="1.2" fill="#C77E95" opacity="0.7"/><path d="M22.2 23.6q1.8 1.5 3.6 0" stroke="#2E2440" stroke-width="1.3" stroke-linecap="round" fill="none"/><ellipse cx="20" cy="31.5" rx="3.2" ry="2" fill="#C77E95"/><ellipse cx="28" cy="31.5" rx="3.2" ry="2" fill="#C77E95"/></svg></span><h3>Doodle Jump</h3><p>Jump from platform to platform and climb higher.</p><div class="play-btn">Play</div></div>
+    <div class="card" tabindex="0" role="button" onclick="openScreen('breakout')"><span class="icon icon-breakout"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="6" rx="2" fill="currentColor"/><rect x="19" y="7" width="10" height="6" rx="2" fill="currentColor"/><rect x="31" y="7" width="10" height="6" rx="2" fill="currentColor"/><rect x="7" y="15" width="10" height="6" rx="2" fill="currentColor" opacity=".75"/><rect x="19" y="15" width="10" height="6" rx="2" fill="currentColor" opacity=".75"/><rect x="31" y="15" width="10" height="6" rx="2" fill="currentColor" opacity=".75"/><circle cx="23" cy="29" r="4" fill="currentColor"/><path d="M14 40h20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span><h3>Breakout</h3><p>Bounce the ball and clear every block.</p><div class="play-btn">Play</div></div>
+    <div class="card" tabindex="0" role="button" onclick="openScreen('snake')"><span class="icon icon-snake"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M10 31c0-7 5-12 12-12h7c5 0 9-3 9-8 0-3-2-5-5-5-3 0-5 2-5 5" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 31c0 6 4 10 10 10h12" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><circle cx="34" cy="11" r="1.5" fill="#2E2440"/></svg></span><h3>Snake</h3><p>Eat, grow longer, and don't hit the walls.</p><div class="play-btn">Play</div></div>
   </div>
 
   <div class="hub-review-area" id="hubReviewArea">
@@ -1294,6 +1304,9 @@ html, body, .screen, .card, .card-grid, .progress-row, .progress-dot,
 
 <div class="screen" id="screen-firefly"><div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div><h2 class="game-title">Balloon Pop</h2><p class="game-sub">Tap and pop all 15 balloons at your own pace.</p><div class="extra-score" id="fireflyScore"></div><div class="extra-game-area" id="fireflyArea"></div><div class="game-top-message" id="top-message-firefly" hidden></div><div class="end-game-controls" id="end-controls-firefly" hidden><button type="button" class="end-game-btn" onclick="playAgain('firefly')">↻ Play Again</button><button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button></div></div>
 <div class="screen" id="screen-flappy"><div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div><h2 class="game-title">Flappy Bird</h2><p class="game-sub">Tap, click, or press Space to flap through the pipes.</p><div class="extra-score" id="flappyScore"></div><div class="extra-game-area" id="flappyArea"></div><div class="game-top-message" id="top-message-flappy" hidden></div><div class="end-game-controls" id="end-controls-flappy" hidden><button type="button" class="end-game-btn" onclick="playAgain('flappy')">↻ Play Again</button><button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button></div></div>
+<div class="screen" id="screen-doodle"><div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div><h2 class="game-title">Doodle Jump</h2><p class="game-sub">Move left and right and keep bouncing higher.</p><div class="extra-score" id="doodleScore"></div><div class="extra-game-area" id="doodleArea"></div><div class="game-top-message" id="top-message-doodle" hidden></div><div class="end-game-controls" id="end-controls-doodle" hidden><button type="button" class="end-game-btn" onclick="playAgain('doodle')">↻ Play Again</button><button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button></div></div>
+<div class="screen" id="screen-breakout"><div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div><h2 class="game-title">Breakout</h2><p class="game-sub">Bounce the ball and clear every block.</p><div class="extra-score" id="breakoutScore"></div><div class="extra-game-area" id="breakoutArea"></div><div class="game-top-message" id="top-message-breakout" hidden></div><div class="end-game-controls" id="end-controls-breakout" hidden><button type="button" class="end-game-btn" onclick="playAgain('breakout')">↻ Play Again</button><button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button></div></div>
+<div class="screen" id="screen-snake"><div class="top-bar"><button class="back-btn" onclick="openScreen('hub')">← back</button></div><h2 class="game-title">Snake</h2><p class="game-sub">Eat the food, grow longer, and avoid the walls and yourself.</p><div class="extra-score" id="snakeScore"></div><div class="extra-game-area" id="snakeArea"></div><div class="game-top-message" id="top-message-snake" hidden></div><div class="end-game-controls" id="end-controls-snake" hidden><button type="button" class="end-game-btn" onclick="playAgain('snake')">↻ Play Again</button><button type="button" class="end-game-btn secondary" onclick="openScreen('hub')">♡ Back to Arcade</button></div></div>
 
 <!-- FINAL SCREEN -->
 <div class="screen" id="screen-final">
@@ -2051,7 +2064,7 @@ function floatHearts(count){
 }
 
 /* ---------- Screen navigation ---------- */
-const defaultCompleted = { memory:false, bubble:false, star:false, flower:false, quiz:false, jar:false, mole:false, basketball:false, iceslide:false, dino:false, firefly:false, flappy:false };
+const defaultCompleted = { memory:false, bubble:false, star:false, flower:false, quiz:false, jar:false, mole:false, basketball:false, iceslide:false, dino:false, firefly:false, flappy:false, doodle:false, breakout:false, snake:false };
 
 // Progress is intentionally persistent. localStorage survives refreshes and returning
 // to the same website on the same browser/device.
@@ -2062,27 +2075,31 @@ try {
 } catch(e) {}
 
 const achievementDefs = [
-  {id:'first_step', icon:'🌱', title:'First Little Step', text:'Finish your very first game.'},
-  {id:'memory_keeper', icon:'🧠', title:'Memory Keeper', text:'Match every cozy pair.'},
-  {id:'bubble_buddy', icon:'🫧', title:'Bubble Buddy', text:'Pop all the bubbles.'},
-  {id:'starry_eyes', icon:'🌟', title:'Starry Eyes', text:'Catch every falling star.'},
-  {id:'flower_heart', icon:'🌼', title:'Flower Heart', text:'Finish the flower game.'},
-  {id:'sweet_answers', icon:'💌', title:'Sweet Answers', text:'Complete the Love Notes Quiz.'},
-  {id:'jar_keeper', icon:'🫙', title:'Jar Keeper', text:'Open the whole jar.'},
-  {id:'mole_patrol', icon:'🐹', title:'Mole Patrol', text:'Bonk all the moles.'},
-  {id:'hoop_dreams', icon:'🏀', title:'Hoop Dreams', text:'Make every basket.'},
-  {id:'ice_friend', icon:'🧊', title:'Ice Friend', text:'Catch all the little fish.'},
-  {id:'dino_dash', icon:'🦕', title:'Tiny Dino Dash', text:'Survive the dino run.'},
-  {id:'firefly_friends', icon:'🎈', title:'Balloon Popper', text:'Pop all the balloons.'},
-  {id:'flappy_bird', icon:'✦', title:'Flappy Bird', text:'Score 15 points and make it through the pipes.'},
-  {id:'arcade_regular', icon:'🎟️', title:'Arcade Regular', text:'Finish 5 different games.'},
-  {id:'cozy_collector', icon:'💗', title:'Cozy Collector', text:'Finish every game in the arcade.'}
+  {id:'first_step', icon:'🌱', title:'First Little Step', text:'First win, how cute!'},
+  {id:'memory_keeper', icon:'🧠', title:'Memory Keeper', text:'Every cozy pair matched.'},
+  {id:'bubble_buddy', icon:'🫧', title:'Bubble Buddy', text:'Every bubble, gone poof!'},
+  {id:'starry_eyes', icon:'🌟', title:'Starry Eyes', text:'Caught every falling star.'},
+  {id:'flower_heart', icon:'🌼', title:'Flower Heart', text:'Loved with every petal.'},
+  {id:'sweet_answers', icon:'💌', title:'Sweet Answers', text:'Every answer sweetly right.'},
+  {id:'jar_keeper', icon:'🫙', title:'Jar Keeper', text:'A whole jar of love.'},
+  {id:'mole_patrol', icon:'🐹', title:'Mole Patrol', text:'Bonked every sneaky mole.'},
+  {id:'hoop_dreams', icon:'🏀', title:'Hoop Dreams', text:'Nothing but net, cutie!'},
+  {id:'ice_friend', icon:'🧊', title:'Ice Friend', text:'Caught every little fish.'},
+  {id:'dino_dash', icon:'🦕', title:'Tiny Dino Dash', text:'Jumped past every dino!'},
+  {id:'firefly_friends', icon:'🎈', title:'Balloon Popper', text:'Popped every floating balloon.'},
+  {id:'flappy_bird', icon:'✦', title:'Flappy Bird', text:'Flew through fifteen pipes.'},
+  {id:'doodle_jump', icon:'↑', title:'Doodle Jump', text:'Climbed way up high!'},
+  {id:'breakout_master', icon:'■', title:'Breakout Master', text:'Cleared every single block.'},
+  {id:'snake_master', icon:'◆', title:'Snake Master', text:'Ate twenty, grew long!'},
+  {id:'arcade_regular', icon:'🎟️', title:'Arcade Regular', text:'Five games, all done!'},
+  {id:'cozy_collector', icon:'💗', title:'Cozy Collector', text:'Finished every single game.'}
 ];
 
 const achievementGameMap = {
   memory:'memory_keeper', bubble:'bubble_buddy', star:'starry_eyes', flower:'flower_heart',
   quiz:'sweet_answers', jar:'jar_keeper', mole:'mole_patrol', basketball:'hoop_dreams',
-  iceslide:'ice_friend', dino:'dino_dash', firefly:'firefly_friends', flappy:'flappy_bird'
+  iceslide:'ice_friend', dino:'dino_dash', firefly:'firefly_friends', flappy:'flappy_bird',
+  doodle:'doodle_jump', breakout:'breakout_master', snake:'snake_master'
 };
 
 let achievements = {};
@@ -2877,7 +2894,7 @@ const extraMessagesByGame = {
 };
 
 const extraStarted={};
-function finishExtra(g,msg){ if(extraStarted[g]?.ended) return; if(extraStarted[g]) extraStarted[g].ended=true; markComplete(g); showModal(g, Array.isArray(msg)?pickRandom(msg):msg); }
+function finishExtra(g,msg){ if(extraStarted[g]?.ended) return; if(extraStarted[g]) extraStarted[g].ended=true; markComplete(g); if(achievementGameMap[g]) unlockAchievement(achievementGameMap[g]); showModal(g, Array.isArray(msg)?pickRandom(msg):msg); }
 function setupExtra(g,html,score=''){ extraStarted[g]={ended:false}; document.getElementById(g+'Area').innerHTML=html; document.getElementById(g+'Score').textContent=score; }
 function pointerXY(e){ const p=('touches' in e && e.touches.length)?e.touches[0]:e; return {x:p.clientX,y:p.clientY}; }
 
@@ -2891,11 +2908,11 @@ mole:()=>{
   holes.forEach((p,i)=>{
     html+=`<div class="g-hole" style="left:${p[0]}%;bottom:${p[1]}px"></div>
     <div class="g-mole-slot" style="left:${p[0]}%;bottom:${p[1]}px">
-      <div class="g-mole" id="ham${i}"><div class="g-mole-body"><div class="g-mole-ear l"></div><div class="g-mole-ear r"></div><div class="g-mole-eye l"></div><div class="g-mole-eye r"></div><div class="g-mole-nose"></div></div></div>
+      <div class="g-mole" id="ham${i}"><div class="g-mole-body"><div class="g-mole-ear l"></div><div class="g-mole-ear r"></div><div class="g-mole-eye l"></div><div class="g-mole-eye r"></div><div class="g-mole-nose"></div><div class="g-mole-blush l"></div><div class="g-mole-blush r"></div></div></div>
     </div>`;
   });
   html+='</div>';
-  setupExtra('mole', html, 'Whacked: 0 / 20');
+  setupExtra('mole', html, 'Bonked: 0 / 20');
   let score=0, target=20; const active={};
   function popRandom(){
     if(extraStarted.mole.ended) return;
@@ -2906,31 +2923,43 @@ mole:()=>{
       active[i]=true;
       const el=document.getElementById('ham'+i);
       el.classList.add('up');
-      const to=setTimeout(()=>{ el.classList.remove('up'); active[i]=false; },650+Math.random()*450);
+      const to=setTimeout(()=>{ el.classList.remove('up'); active[i]=false; },700+Math.random()*500);
       el.onclick=(e)=>{
         if(!active[i]) return;
         clearTimeout(to); active[i]=false;
         el.classList.remove('up'); el.classList.add('bonked');
-        setTimeout(()=>el.classList.remove('bonked'),260);
+        setTimeout(()=>el.classList.remove('bonked'),300);
         spawnPopBurst(el);
         AudioFX.bonk();
         score++;
-        document.getElementById('moleScore').textContent='Whacked: '+score+' / '+target;
+        document.getElementById('moleScore').textContent='Bonked: '+score+' / '+target;
         if(score>=target) finishExtra('mole',extraMessagesByGame.mole);
       };
     });
-    if(!extraStarted.mole.ended) setTimeout(popRandom, 500+Math.random()*400);
+    if(!extraStarted.mole.ended) setTimeout(popRandom, 400+Math.random()*350);
   }
   function spawnPopBurst(el){
     const board=document.getElementById('moleBoard');
     const r=el.getBoundingClientRect(), br=board.getBoundingClientRect();
-    for(let i=0;i<6;i++){
+    for(let i=0;i<8;i++){
       const s=document.createElement('div'); s.className='g-poof';
       s.style.left=(r.left-br.left+r.width/2)+'px'; s.style.top=(r.top-br.top+r.height/2)+'px';
-      const ang=(i/6)*Math.PI*2, dist=26+Math.random()*14;
+      s.style.background = ['var(--rose)','var(--gold)','var(--sage)','var(--lavender)'][i%4];
+      const ang=(i/8)*Math.PI*2, dist=30+Math.random()*18;
       s.style.setProperty('--dx',(Math.cos(ang)*dist)+'px'); s.style.setProperty('--dy',(Math.sin(ang)*dist)+'px');
       board.appendChild(s);
-      setTimeout(()=>s.remove(),420);
+      setTimeout(()=>s.remove(),500);
+    }
+    // add floating hearts
+    for(let i=0;i<3;i++){
+      const h=document.createElement('div');
+      h.textContent='💗';
+      h.style.cssText='position:absolute;pointer-events:none;font-size:18px;animation:gPoof .6s ease-out forwards;';
+      h.style.left=(r.left-br.left+r.width/2)+'px'; h.style.top=(r.top-br.top+r.height/2)+'px';
+      const ang=(i/3)*Math.PI*2, dist=25+Math.random()*15;
+      h.style.setProperty('--dx',(Math.cos(ang)*dist)+'px'); h.style.setProperty('--dy',(Math.sin(ang)*dist)+'px');
+      board.appendChild(h);
+      setTimeout(()=>h.remove(),600);
     }
   }
   popRandom();
@@ -3009,70 +3038,128 @@ basketball:()=>{
 /* ---- Catch the Fish: CSS-drawn pond, fish, and rod, tap timing to catch ---- */
 iceslide:()=>{
   if(extraStarted.iceslide) return;
-  const target=8;
-  setupExtra('iceslide', `<div class="g-pond" id="pond"></div><div class="g-land"><div class="g-rod" id="rod"><div class="g-rod-line"></div><div class="g-rod-hook"></div></div></div><div class="g-bar" id="bar"><div class="g-bar-zone" id="zone"></div><div class="g-bar-indicator" id="indicator"></div></div><p style="text-align:center;color:var(--text-soft);font-size:.85rem">Tap the rod to cast, then tap again when the marker is in the bright zone!</p>`, 'Caught: 0 / '+target);
+  const target=15;
+  setupExtra('iceslide', `<div class="g-pond" id="pond"><div class="g-hook" id="hook"><div class="g-hook-line"></div><div class="g-hook-head"></div></div></div><div class="g-land"></div><p style="text-align:center;color:var(--text-soft);font-size:.85rem">Move to aim. Tap/click to drop the hook and catch fish!</p>`, 'Caught: 0 / '+target);
   const pond=document.getElementById('pond');
   let fishEls=[];
+  const fishColors=['var(--sage)','var(--sage-deep)','var(--rose)','var(--gold)','var(--lavender)'];
   for(let i=0;i<target;i++){
-    const el=document.createElement('div'); el.className='g-fish'; el.innerHTML='<div class="g-fish-body"></div><div class="g-fish-tail"></div><div class="g-fish-eye"></div>';
-    el.style.top=(12+Math.random()*68)+'%'; el.style.left=(8+Math.random()*76)+'%';
+    const el=document.createElement('div'); el.className='g-fish';
+    const color=fishColors[i%fishColors.length];
+    el.innerHTML=`<div class="g-fish-body" style="background:linear-gradient(160deg,${color},${color})"></div><div class="g-fish-tail" style="background:${color}"></div><div class="g-fish-eye"></div>`;
+    el.style.top=(15+Math.random()*65)+'%';
+    el.dataset.speed=0.3+Math.random()*0.5;
+    el.dataset.dir=Math.random()>.5 ? 1 : -1;
+    el.dataset.x=8+Math.random()*76;
+    el.style.left=el.dataset.x+'%';
+    el.style.transform = el.dataset.dir>0 ? 'scaleX(1)' : 'scaleX(-1)';
     pond.appendChild(el);
     fishEls.push(el);
-    (function swim(el){
-      if(!el.isConnected) return;
-      const nx=8+Math.random()*76;
-      el.style.transitionDuration=(1+Math.random()*1.6)+'s';
-      el.style.transform = nx>parseFloat(el.style.left||0) ? 'scaleX(1)' : 'scaleX(-1)';
-      el.style.left=nx+'%';
-      setTimeout(()=>swim(el), 1400+Math.random()*1000);
-    })(el);
   }
-  for(let i=0;i<10;i++){
+  for(let i=0;i<12;i++){
     const b=document.createElement('div'); b.className='g-bubble';
     b.style.left=(5+Math.random()*90)+'%'; b.style.animationDelay=(Math.random()*4)+'s'; b.style.animationDuration=(3+Math.random()*3)+'s';
     pond.appendChild(b);
   }
-  let caught=0, casting=false, dir=1, pos=0;
-  const zone=document.getElementById('zone'), indicator=document.getElementById('indicator'), rod=document.getElementById('rod');
-  const zoneStart=34+Math.random()*12;
-  zone.style.left=zoneStart+'%'; zone.style.width='20%';
-  function startCast(){
-    if(casting || extraStarted.iceslide.ended) return;
-    casting=true; pos=0; dir=1;
-    (function loop(){
-      if(!casting) return;
-      pos+=dir*2.8;
-      if(pos>=100){pos=100;dir=-1;} if(pos<=0){pos=0;dir=1;}
-      indicator.style.left=pos+'%';
-      requestAnimationFrame(loop);
-    })();
+  const hook=document.getElementById('hook');
+  const hookLine=hook.querySelector('.g-hook-line');
+  const hookHead=hook.querySelector('.g-hook-head');
+  let caught=0, dropping=false, hookY=0, hookTargetX=50, droppingSpeed=0;
+  function updateHookX(clientX){
+    const rect=pond.getBoundingClientRect();
+    let x=((clientX-rect.left)/rect.width)*100;
+    x=Math.max(8, Math.min(92, x));
+    hookTargetX=x;
   }
-  function removeOneFish(){
-    const remaining = fishEls.filter(f=>f.isConnected);
-    if(!remaining.length) return;
-    const victim = remaining[Math.floor(Math.random()*remaining.length)];
-    victim.style.transition='transform .35s ease, opacity .35s ease';
-    victim.style.opacity='0';
-    victim.style.transform='scale(0)';
-    setTimeout(()=>victim.remove(),360);
+  pond.addEventListener('mousemove', e=>updateHookX(e.clientX));
+  pond.addEventListener('touchmove', e=>{updateHookX(e.touches[0].clientX); e.preventDefault();}, {passive:false});
+  pond.addEventListener('click', dropHook);
+  pond.addEventListener('touchstart', e=>{dropHook(e); e.preventDefault();}, {passive:false});
+  function dropHook(e){
+    if(extraStarted.iceslide.ended || dropping) return;
+    dropping=true;
+    droppingSpeed=0;
+    hookY=0;
+    hook.style.transition='left .08s ease-out';
+    hook.style.left=hookTargetX+'%';
+    AudioFX.splash();
   }
-  rod.onclick=()=>{
-    if(extraStarted.iceslide.ended) return;
-    if(!casting){ startCast(); rod.classList.add('casting'); return; }
-    casting=false; rod.classList.remove('casting');
-    const ok=pos>=zoneStart && pos<=zoneStart+20;
-    if(ok){
-      caught++;
-      rod.classList.add('caught'); setTimeout(()=>rod.classList.remove('caught'),320);
-      removeOneFish();
-      AudioFX.splash();
-      document.getElementById('iceslideScore').textContent='Caught: '+caught+' / '+target;
-      if(caught>=target){ finishExtra('iceslide', extraMessagesByGame.iceslide); return; }
-    } else {
-      document.getElementById('iceslideScore').textContent='Caught: '+caught+' / '+target+'  (missed, try again!)';
+  function checkCatch(){
+    const hookLeft=parseFloat(hook.style.left)||hookTargetX;
+    for(const fish of fishEls){
+      if(!fish.isConnected || fish.dataset.caught) continue;
+      const fishLeft=parseFloat(fish.dataset.x);
+      const fishTop=parseFloat(fish.style.top);
+      // hook reaches fish depth
+      if(hookY>=fishTop-5 && hookY<=fishTop+15 && Math.abs(hookLeft-fishLeft)<6){
+        fish.dataset.caught='true';
+        caught++;
+        fish.style.transition='transform .4s ease, opacity .4s ease';
+        fish.style.transform+=' scale(0) rotate(90deg)';
+        fish.style.opacity='0';
+        setTimeout(()=>fish.remove(),400);
+        spawnCatchBurst(hookLeft, fishTop);
+        AudioFX.pop();
+        document.getElementById('iceslideScore').textContent='Caught: '+caught+' / '+target;
+        if(caught>=target){ finishExtra('iceslide', extraMessagesByGame.iceslide); return true; }
+        break;
+      }
     }
-    indicator.style.left='0%';
-  };
+    return false;
+  }
+  function spawnCatchBurst(x,y){
+    const rect=pond.getBoundingClientRect();
+    for(let i=0;i<6;i++){
+      const s=document.createElement('div'); s.className='g-bubble';
+      s.style.width='10px'; s.style.height='10px'; s.style.background='var(--gold)';
+      s.style.left=x+'%'; s.style.top=y+'%'; s.style.animation='none';
+      s.style.transition='transform .5s ease-out, opacity .5s ease-out';
+      pond.appendChild(s);
+      const ang=(i/6)*Math.PI*2, dist=15+Math.random()*10;
+      requestAnimationFrame(()=>{
+        s.style.transform=`translate(${Math.cos(ang)*dist}px, ${Math.sin(ang)*dist}px) scale(0)`;
+        s.style.opacity='0';
+      });
+      setTimeout(()=>s.remove(),500);
+    }
+  }
+  function animate(){
+    if(extraStarted.iceslide.ended) return;
+    // smooth hook follow
+    const currentLeft=parseFloat(hook.style.left)||hookTargetX;
+    const newLeft=currentLeft+(hookTargetX-currentLeft)*0.25;
+    hook.style.left=newLeft+'%';
+    // dropping
+    if(dropping){
+      droppingSpeed+=0.8;
+      hookY+=droppingSpeed;
+      hookLine.style.height=hookY+'%';
+      if(hookY>=95){
+        // reached bottom, reel back
+        dropping=false;
+        hookLine.style.transition='height .3s ease-out';
+        hookLine.style.height='0%';
+        setTimeout(()=>{hookLine.style.transition='';},300);
+      }else{
+        checkCatch();
+      }
+    }
+    // swim fish
+    fishEls.forEach(fish=>{
+      if(!fish.isConnected || fish.dataset.caught) return;
+      let x=parseFloat(fish.dataset.x);
+      let dir=parseFloat(fish.dataset.dir);
+      let speed=parseFloat(fish.dataset.speed);
+      x+=dir*speed;
+      if(x<=8){x=8; dir=1; fish.style.transform='scaleX(1)';}
+      if(x>=92){x=92; dir=-1; fish.style.transform='scaleX(-1)';}
+      fish.dataset.x=x;
+      fish.dataset.dir=dir;
+      fish.style.left=x+'%';
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
 },
 
 /* ---- Dino Runner: canvas-drawn cute green dino + cactus, parallax ground ---- */
@@ -3197,6 +3284,155 @@ flappy:()=>{
   function endGame(){ alive=false; if(score>=target){ finishExtra('flappy',extraMessagesByGame.flappy); return; } document.getElementById('flappyScore').textContent='Score: '+score+' / '+target+'  (try again!)'; const msg=document.getElementById('top-message-flappy'),controls=document.getElementById('end-controls-flappy'); if(msg){msg.innerHTML='<div class="game-top-message-heart">♡</div>You hit a pipe. Get to 15 and you win!';msg.hidden=false;} if(controls)controls.hidden=false; }
   function loop(t){ if(!alive || !started)return; const dt=Math.min(32,t-lastT);lastT=t; const scale=dt/16.67; bird.vy+=gravity*scale;bird.y+=bird.vy*scale;spawnTimer-=dt;if(spawnTimer<=0){addPipe();spawnTimer=1450;} pipes.forEach(p=>{p.x-=pipeSpeed*scale;if(!p.scored&&p.x+pipeWidth<bird.x){p.scored=true;score++;AudioFX.pop();document.getElementById('flappyScore').textContent='Score: '+score+' / '+target;if(score>=target){endGame();}}}); pipes=pipes.filter(p=>p.x>-pipeWidth-10); const hitTop=bird.y-bird.r<=0,hitGround=bird.y+bird.r>=canvas.height-10,hitPipe=pipes.some(p=>bird.x+bird.r>p.x&&bird.x-bird.r<p.x+pipeWidth&&(bird.y-bird.r<p.top||bird.y+bird.r>p.top+gap)); draw();if(hitTop||hitGround||hitPipe){endGame();return;} requestAnimationFrame(loop); }
   draw();
+},
+
+/* ---- Doodle Jump: auto-bouncing player, horizontal movement, scrolling platforms ---- */
+doodle:()=>{
+  if(extraStarted.doodle) return;
+  setupExtra('doodle','<canvas id="doodleCanvas" class="g-doodle-canvas" width="420" height="500" aria-label="Doodle Jump game"></canvas>','Height: 0 / 1000');
+  const canvas=document.getElementById('doodleCanvas'),ctx=canvas.getContext('2d');
+  const target=1000,platformW=72,platformH=10;
+  let player={x:210,y:390,vx:0,vy:0,w:26,h:28},platforms=[],blockages=[],height=0,alive=true,lastT=performance.now(),keys={left:false,right:false};
+  function makePlatform(x,y){return{x,y,w:platformW,h:platformH};}
+  function makeBlockage(x,y){return{x,y,w:28,h:34};}
+  platforms.push(makePlatform(174,455));
+  /* Solid platforms deserve real gaps: each row is roughly one full jump's climb,
+     and the next platform lands only one short hop sideways, so the doodle can
+     always actually reach it instead of whiffing straight past. */
+  function gapBetween(){ return 84 + Math.random()*20; } // ~84-104px between rows
+  function nextX(prevX, side){
+    let x = side==='right' ? prevX+(70+Math.random()*70) : prevX-(70+Math.random()*70);
+    if(Math.abs(x-prevX)<45) x = side==='right' ? prevX+(75+Math.random()*65) : prevX-(75+Math.random()*65);
+    return Math.max(10, Math.min(canvas.width-platformW-10, x));
+  }
+  let rowY=455, prevX=174;
+  for(let i=1;i<16;i++){
+    rowY-=gapBetween();
+    const side=prevX<canvas.width/2 ? 'right':'left';
+    prevX=nextX(prevX, side);
+    platforms.push(makePlatform(prevX,rowY));
+    if(i>2 && i%3===0){
+      const bx=prevX<canvas.width/2 ? canvas.width-65 : 25;
+      blockages.push(makeBlockage(bx,rowY-34));
+    }
+  }
+  function moveKey(e,on){if(e.code==='ArrowLeft'||e.code==='KeyA'){e.preventDefault();keys.left=on;}if(e.code==='ArrowRight'||e.code==='KeyD'){e.preventDefault();keys.right=on;}}
+  window.addEventListener('keydown',e=>moveKey(e,true));
+  window.addEventListener('keyup',e=>moveKey(e,false));
+  let touchX=null;
+  canvas.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch'){const r=canvas.getBoundingClientRect();touchX=e.clientX-r.left;}});
+  canvas.addEventListener('pointerleave',()=>{if(touchX!==null)touchX=null;});
+  canvas.addEventListener('pointerdown',e=>{const r=canvas.getBoundingClientRect();touchX=e.clientX-r.left;});
+  const gravity=.42,jump=-10.2;
+  /* A rounder, cuter doodle: chubby body, big eyes, blush and a happy smile,
+     with a little tilt that follows where it's moving and a gentle squash
+     when it jumps or falls. The collision box is unchanged. */
+  function drawPlayer(){
+    ctx.save();
+    ctx.translate(player.x, player.y);
+    const tilt=Math.max(-0.22, Math.min(0.22, player.vx*0.045));
+    ctx.rotate(tilt);
+    let stretch=1;
+    if(player.vy<-2) stretch=1.12;
+    else if(player.vy>3) stretch=0.86;
+    ctx.scale(1/stretch, stretch);
+    // tiny feet
+    ctx.fillStyle='#C77E95';
+    ctx.beginPath(); ctx.ellipse(-8,12.5,4.2,3,0,0,7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(8,12.5,4.2,3,0,0,7); ctx.fill();
+    // chubby round body
+    ctx.fillStyle='#D998AC';
+    ctx.beginPath(); ctx.roundRect(-13,-14,26,28,10); ctx.fill();
+    // cream belly
+    ctx.fillStyle='#F3EAD8';
+    ctx.beginPath(); ctx.ellipse(0,5,7.2,7.8,0,0,Math.PI*2); ctx.fill();
+    // big eyes
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(-5,-7,3.6,0,Math.PI*2); ctx.arc(5,-7,3.6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#2E2440';
+    ctx.beginPath(); ctx.arc(-5,-7,2,0,Math.PI*2); ctx.arc(5,-7,2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(-4.2,-8.2,0.8,0,Math.PI*2); ctx.arc(5.8,-8.2,0.8,0,Math.PI*2); ctx.fill();
+    // blush
+    ctx.fillStyle='rgba(217,142,163,.55)';
+    ctx.beginPath(); ctx.ellipse(-9,1,2.6,1.8,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(9,1,2.6,1.8,0,0,Math.PI*2); ctx.fill();
+    // happy smile
+    ctx.strokeStyle='#2E2440'; ctx.lineWidth=1.2; ctx.lineCap='round';
+    ctx.beginPath(); ctx.arc(0,1.5,3.2,0.12*Math.PI,0.88*Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='rgba(217,174,110,.16)';for(let i=0;i<7;i++){ctx.beginPath();ctx.arc(35+i*65,45+(i%3)*42,16,0,Math.PI*2);ctx.fill();}
+    platforms.forEach(p=>{ctx.fillStyle='#8FBFAE';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle='rgba(231,222,233,.18)';ctx.fillRect(p.x+8,p.y+2,p.w-16,3);});
+    blockages.forEach(b=>{ctx.fillStyle='#C77E95';ctx.fillRect(b.x,b.y,b.w,b.h);ctx.fillStyle='rgba(231,222,233,.18)';ctx.fillRect(b.x+5,b.y+5,b.w-10,4);});
+    drawPlayer();
+  }
+  function end(){alive=false;window.removeEventListener('keydown',keyDown);window.removeEventListener('keyup',keyUp);if(height>=target){finishExtra('doodle','You climbed all the way to 1000. That little jump was seriously impressive.');}else{document.getElementById('doodleScore').textContent='Height: '+Math.floor(height)+' / '+target+'  (try again!)';const m=document.getElementById('top-message-doodle');if(m){m.innerHTML='<div class="game-top-message-heart">♡</div>Keep bouncing and reach 1000 to finish!';m.hidden=false;}document.getElementById('end-controls-doodle').hidden=false;}}
+  function keyDown(e){moveKey(e,true)} function keyUp(e){moveKey(e,false)}
+  window.removeEventListener('keydown',e=>moveKey(e,true));window.removeEventListener('keyup',e=>moveKey(e,false));
+  function loop(t){
+    if(!alive)return;
+    const dt=Math.min(32,t-lastT),scale=dt/16.67;lastT=t;
+    let dir=0;if(keys.left)dir--;if(keys.right)dir++;if(touchX!==null)dir=touchX<player.x-.1?-1:touchX>player.x+.1?1:0;
+    player.vx+=(dir*0.65*scale);player.vx*=Math.pow(.82,scale);player.vx=Math.max(-5,Math.min(5,player.vx));player.x+=player.vx*scale;
+    if(player.x<player.w/2)player.x=player.w/2;if(player.x>canvas.width-player.w/2)player.x=canvas.width-player.w/2;
+    const prevY=player.y;player.vy+=gravity*scale;player.y+=player.vy*scale;
+    /* Solid platforms: bounce off the top when landing, and bonk the head
+       (no clipping) if the doodle jumps into the underside. */
+    const prevBottom=prevY+player.h/2, prevTop=prevY-player.h/2;
+    for(const p of platforms){
+      if(!(player.x+player.w/2>p.x && player.x-player.w/2<p.x+p.w)) continue;
+      const botCross=prevBottom<=p.y && player.y+player.h/2>=p.y;
+      const topCross=prevTop>=p.y+p.h && player.y-player.h/2<=p.y+p.h;
+      if(player.vy>0 && botCross){ player.y=p.y-player.h/2; player.vy=jump; AudioFX.jump(); }
+      else if(player.vy<0 && topCross){ player.y=p.y+p.h+player.h/2; player.vy=0; }
+    }
+    const hitBlock=blockages.some(b=>player.x+player.w/2>b.x&&player.x-player.w/2<b.x+b.w&&player.y+player.h/2>b.y&&player.y-player.h/2<b.y+b.h);
+    if(hitBlock){end();return;}
+    if(player.y<190){const shift=190-player.y;player.y=190;platforms.forEach(p=>p.y+=shift);blockages.forEach(b=>b.y+=shift);height+=shift;while(platforms.length&&platforms[0].y>canvas.height+30)platforms.shift();blockages=blockages.filter(b=>b.y<canvas.height+30);let top=platforms.length?Math.min(...platforms.map(p=>p.y)):canvas.height;while(platforms.length<16){top-=gapBetween();const prevTopX=platforms[platforms.length-1].x;const side=prevTopX<canvas.width/2?'right':'left';const x=nextX(prevTopX,side);platforms.push(makePlatform(x,top));if(platforms.length%3===0){const bx=x<canvas.width/2?canvas.width-65:25;blockages.push(makeBlockage(bx,top-34));}}}
+    document.getElementById('doodleScore').textContent='Height: '+Math.floor(height)+' / '+target;
+    if(height>=target){end();return;}if(player.y-player.h/2>canvas.height+20){end();return;}draw();requestAnimationFrame(loop);
+  }
+  draw();requestAnimationFrame(loop);
+},
+
+/* ---- Breakout: paddle, ball, and destructible blocks ---- */
+breakout:()=>{
+  if(extraStarted.breakout) return;
+  setupExtra('breakout','<canvas id="breakoutCanvas" class="g-breakout-canvas" width="420" height="420" aria-label="Breakout game"></canvas>','Blocks: 0 / 36');
+  const canvas=document.getElementById('breakoutCanvas'),ctx=canvas.getContext('2d');
+  let paddle={x:175,y:385,w:70,h:10},ball={x:210,y:350,vx:3.1,vy:-4.2,r:7},blocks=[],broken=0,alive=true,lastT=performance.now(),mouseX=null;
+  for(let r=0;r<6;r++)for(let c=0;c<6;c++)blocks.push({x:28+c*62,y:45+r*25,w:54,h:16,alive:true});
+  function setPaddle(x){const rect=canvas.getBoundingClientRect();paddle.x=Math.max(0,Math.min(canvas.width-paddle.w,x-rect.left-paddle.w/2));}
+  canvas.addEventListener('pointermove',e=>setPaddle(e.clientX));canvas.addEventListener('pointerdown',e=>setPaddle(e.clientX));
+  function key(e,on){if(e.code==='ArrowLeft'||e.code==='KeyA'){e.preventDefault();paddle.x=Math.max(0,paddle.x-(on?55:0));}if(e.code==='ArrowRight'||e.code==='KeyD'){e.preventDefault();paddle.x=Math.min(canvas.width-paddle.w,paddle.x+(on?55:0));}}
+  window.addEventListener('keydown',e=>key(e,true));
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);blocks.forEach((b,i)=>{if(!b.alive)return;ctx.fillStyle=i%2?'#8FBFAE':'#D998AC';ctx.fillRect(b.x,b.y,b.w,b.h);ctx.fillStyle='rgba(255,255,255,.1)';ctx.fillRect(b.x+5,b.y+3,b.w-10,3);});ctx.fillStyle='#D9AE6E';ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);ctx.fillStyle='#E7DEE9';ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();}
+  function end(win){alive=false;if(win){finishExtra('breakout','Every block is gone. You cleared the whole board and absolutely smashed it.');}else{document.getElementById('breakoutScore').textContent='Blocks: '+broken+' / 36  (try again!)';const m=document.getElementById('top-message-breakout');if(m){m.innerHTML='<div class="game-top-message-heart">♡</div>Keep the ball alive and clear every block!';m.hidden=false;}document.getElementById('end-controls-breakout').hidden=false;}}
+  function loop(t){if(!alive)return;const dt=Math.min(32,t-lastT),scale=dt/16.67;lastT=t;ball.x+=ball.vx*scale;ball.y+=ball.vy*scale;if(ball.x-ball.r<=0){ball.x=ball.r;ball.vx=Math.abs(ball.vx);}if(ball.x+ball.r>=canvas.width){ball.x=canvas.width-ball.r;ball.vx=-Math.abs(ball.vx);}if(ball.y-ball.r<=0){ball.y=ball.r;ball.vy=Math.abs(ball.vy);}if(ball.y+ball.r>=paddle.y&&ball.y-ball.r<=paddle.y+paddle.h&&ball.x>=paddle.x&&ball.x<=paddle.x+paddle.w&&ball.vy>0){ball.y=paddle.y-ball.r;const hit=(ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);ball.vx=hit*4.8;ball.vy=-Math.max(3.8,Math.abs(ball.vy));AudioFX.pop();}for(const b of blocks){if(!b.alive)continue;if(ball.x+ball.r>b.x&&ball.x-ball.r<b.x+b.w&&ball.y+ball.r>b.y&&ball.y-ball.r<b.y+b.h){b.alive=false;broken++;ball.vy*=-1;AudioFX.pop();break;}}document.getElementById('breakoutScore').textContent='Blocks: '+broken+' / 36';if(broken===36){end(true);return;}if(ball.y-ball.r>canvas.height){end(false);return;}draw();requestAnimationFrame(loop);}
+  draw();requestAnimationFrame(loop);
+},
+
+/* ---- Snake: grid movement, food, growth, wall and self collision ---- */
+snake:()=>{
+  if(extraStarted.snake) return;
+  setupExtra('snake','<canvas id="snakeCanvas" class="g-snake-canvas" width="420" height="420" aria-label="Snake game"></canvas>','Food: 0 / 20');
+  const canvas=document.getElementById('snakeCanvas'),ctx=canvas.getContext('2d'),grid=21,size=20;
+  let snake=[{x:10,y:12},{x:9,y:12},{x:8,y:12}],dir={x:1,y:0},next={x:1,y:0},food={x:15,y:8},score=0,alive=true,last=performance.now(),acc=0,started=false;
+  function placeFood(){do{food={x:Math.floor(Math.random()*grid),y:Math.floor(Math.random()*grid)}}while(snake.some(s=>s.x===food.x&&s.y===food.y));}
+  function change(dx,dy){if(dir.x===-dx&&dir.y===-dy)return;next={x:dx,y:dy};}
+  function key(e){if(!started){started=true;} if(e.code==='ArrowUp'||e.code==='KeyW'){e.preventDefault();change(0,-1)}else if(e.code==='ArrowDown'||e.code==='KeyS'){e.preventDefault();change(0,1)}else if(e.code==='ArrowLeft'||e.code==='KeyA'){e.preventDefault();change(-1,0)}else if(e.code==='ArrowRight'||e.code==='KeyD'){e.preventDefault();change(1,0)}}
+  window.addEventListener('keydown',key);
+  let swipeStart=null;
+  canvas.addEventListener('pointerdown',e=>{if(!started){started=true;} swipeStart={x:e.clientX,y:e.clientY};});
+  canvas.addEventListener('pointerup',e=>{if(!swipeStart)return;const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y;if(Math.max(Math.abs(dx),Math.abs(dy))>18){if(Math.abs(dx)>Math.abs(dy))change(dx>0?1:-1,0);else change(0,dy>0?1:-1);}swipeStart=null;});
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='rgba(217,174,110,.12)';for(let i=0;i<grid;i++){ctx.fillRect(i*size,0,1,canvas.height);ctx.fillRect(0,i*size,canvas.width,1);}ctx.fillStyle='#D9AE6E';ctx.beginPath();ctx.arc(food.x*size+10,food.y*size+10,6,0,Math.PI*2);ctx.fill();snake.forEach((s,i)=>{ctx.fillStyle=i?'#8FBFAE':'#D998AC';ctx.beginPath();ctx.roundRect(s.x*size+2,s.y*size+2,size-4,size-4,5);ctx.fill();});if(!started){ctx.fillStyle='rgba(15,10,25,.55)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#E7DEE9';ctx.font='700 18px Quicksand';ctx.textAlign='center';ctx.fillText('Tap or press any key to start', canvas.width/2, canvas.height/2);ctx.textAlign='start';}}
+  function end(win){alive=false;window.removeEventListener('keydown',key);if(win){finishExtra('snake','Twenty pieces of food and a very long snake. You owned that whole board.');}else{document.getElementById('snakeScore').textContent='Food: '+score+' / 20  (try again!)';const m=document.getElementById('top-message-snake');if(m){m.innerHTML='<div class="game-top-message-heart">♡</div>You ran into something. Get to 20 food to finish!';m.hidden=false;}document.getElementById('end-controls-snake').hidden=false;}}
+  function tick(){if(!started) return; dir=next;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.x>=grid||head.y<0||head.y>=grid||snake.some((s,i)=>i>0&&s.x===head.x&&s.y===head.y)){end(false);return;}snake.unshift(head);if(head.x===food.x&&head.y===food.y){score++;AudioFX.pop();placeFood();}else snake.pop();document.getElementById('snakeScore').textContent='Food: '+score+' / 20';if(score>=20){end(true);return;}}
+  function loop(t){if(!alive)return;acc+=t-last;last=t;if(acc>=125){acc=0;tick();}draw();requestAnimationFrame(loop);}
+  draw();requestAnimationFrame(loop);
 },
 
 /* ---- Balloon Pop: CSS-drawn balloons drifting up, tap to pop ---- */
